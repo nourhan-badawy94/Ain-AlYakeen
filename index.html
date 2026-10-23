@@ -313,6 +313,31 @@ figure.ph figcaption{font-size:.7rem;color:var(--muted);text-align:center}
 .carr svg{width:16px;height:16px}
 .carr.l{left:max(8px,env(safe-area-inset-left,0px))}.carr.r{right:max(8px,env(safe-area-inset-right,0px))}
 .carr.off,.cfade.off{opacity:0;pointer-events:none}
+.caddr{display:block;font-size:.8rem;color:var(--muted);margin-top:4px;text-decoration:none;line-height:1.6}
+.cphones a small{color:var(--muted);font-size:.72rem;margin-inline-start:4px}
+.cphones a{display:inline-flex;align-items:center;gap:6px}
+.follow-head{text-align:center;margin-top:10px}.follow-head h2{font-size:1.2rem}.follow-head p{color:var(--muted);font-size:.85rem}
+.follow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:560px){.follow{grid-template-columns:1fr}}
+.fl{display:flex;gap:10px;align-items:center;background:var(--surface-2);border-radius:14px;padding:10px 12px;text-decoration:none;color:var(--ink);border:1px solid transparent}
+.fl:hover{border-color:var(--line)}
+.fl .ic{flex:0 0 34px;height:34px;border-radius:10px;display:grid;place-items:center;color:#fff}
+.fl .ic svg{width:18px;height:18px}
+.fl .ic.tg{background:#229ED9}.fl .ic.fb{background:#1877F2}
+.fl b{display:block;font-size:.84rem;font-weight:600;line-height:1.5}
+.fl small{display:block;font-size:.7rem;color:var(--muted);line-height:1.55}
+.fl .warn{color:var(--plum)}
+.fl .go{margin-inline-start:auto;font-size:.7rem;color:var(--green);font-weight:600;white-space:nowrap}
+.pitem.link{text-decoration:none;color:inherit;cursor:pointer}
+.pitem .plink{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;color:var(--green);font-weight:600;margin-top:2px}
+.cact a,.cact button{border:0;color:var(--navy);background:rgba(29,58,92,.09)}.cent-h .cact svg{color:inherit}.cact .wa{color:#1fa855;background:rgba(37,211,102,.13)}.cact .fbk{color:#1877F2;background:rgba(24,119,242,.11)}.cact a[aria-label^="موقع"]{color:#d93a2f;background:rgba(234,67,53,.1)}@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .cact a,:root:not([data-theme="light"]) .cact button{background:rgba(156,194,230,.12)}}:root[data-theme="dark"] .cact a,:root[data-theme="dark"] .cact button{background:rgba(156,194,230,.12)}.cent-h>svg{color:#EA4335}.caddr{color:inherit}
+.book{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:linear-gradient(135deg,var(--green-soft),var(--surface));border:1.5px solid var(--gold);border-radius:18px;padding:14px 16px;margin-block:4px}
+.book-t{display:flex;flex-direction:column;gap:2px}
+.book-t b{font-family:var(--f-display);color:var(--navy);font-size:1.05rem}
+.book-t>span{font-size:.82rem;color:var(--muted)}
+.book-a{display:flex;gap:8px}
+.book-a .btn{display:inline-flex;align-items:center;gap:6px}
+#follow{scroll-margin-top:calc(var(--hdr) + 28px)}
 .jumplist{list-style:arabic-indic}
 .linkbtn{border:0;background:none;padding:0;color:var(--green);font:inherit;font-weight:600;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
 .jumplist button:hover{color:var(--green)}
@@ -638,6 +663,7 @@ footer p{font-size:.85rem;color:var(--muted)}
       <button class="sub" data-go="tracker">عباداتي</button>
       </div>
       <button data-go="contact">تواصل معنا</button>
+      <button data-go="contact" data-anchor="follow">تابع أنشطتنا</button>
     </div>
   </div>
 </header>
@@ -716,7 +742,10 @@ footer p{font-size:.85rem;color:var(--muted)}
   <section class="contact" id="contact">
     <h2>تواصل معنا</h2>
     <p>يسعدنا تواصلكم واستفساراتكم عن برامجنا وفروعنا</p>
+    <div class="book"><div class="book-t"><b>احجز عمرتك أو حجك مع عين اليقين</b><span>للاستفسار والحجز تواصلوا معنا</span></div><div class="book-a"><a class="btn green sm" href="https://wa.me/201005005409?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%D8%A7%D9%84%D8%B9%D9%85%D8%B1%D8%A9%20%D8%A3%D9%88%20%D8%A7%D9%84%D8%AD%D8%AC%20%D9%85%D8%B9%20%D8%B9%D9%8A%D9%86%20%D8%A7%D9%84%D9%8A%D9%82%D9%8A%D9%86" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.7 11.8 11.8 0 004.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>واتساب</a><a class="btn ghost sm" href="tel:+201005005409"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 005 5L15 12l5 2v4a2 2 0 01-2 2A16 16 0 013 5a2 2 0 012-2z"/></svg>اتصال</a></div></div>
     <div id="contactList" class="stack" style="gap:12px"></div>
+    <div class="follow-head" id="follow"><h2>تابع أنشطتنا</h2><p>قنواتنا وصفحاتنا على تيليجرام وفيسبوك</p></div>
+    <div id="followList" class="follow"></div>
   </section>
 </section>
 
@@ -730,6 +759,7 @@ footer p{font-size:.85rem;color:var(--muted)}
       <p class="by">إعداد فريق الدعوة والتوعية بأكاديمية عين اليقين · تحت إشراف المعلمة د. هالة الجعلي</p>
     </div>
   </div>
+  <div class="book"><div class="book-t"><b>احجز عمرتك مع عين اليقين</b><span>للاستفسار والحجز تواصلوا معنا</span></div><div class="book-a"><a class="btn green sm" href="https://wa.me/201005005409?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%D8%A7%D9%84%D8%B9%D9%85%D8%B1%D8%A9%20%D9%85%D8%B9%20%D8%B9%D9%8A%D9%86%20%D8%A7%D9%84%D9%8A%D9%82%D9%8A%D9%86" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.7 11.8 11.8 0 004.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>واتساب</a><a class="btn ghost sm" href="tel:+201005005409"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 005 5L15 12l5 2v4a2 2 0 01-2 2A16 16 0 013 5a2 2 0 012-2z"/></svg>اتصال</a></div></div>
 
   <div class="stack">
     <div class="sec-head"><h2>أركان العمرة</h2><small>أربعة لا تصح العمرة بدونها</small></div>
@@ -767,6 +797,7 @@ footer p{font-size:.85rem;color:var(--muted)}
     <img data-img="hero_hajj" alt="جبل الرحمة بعرفات">
     <div class="txt"><h1>مناسك الحج</h1><p class="tag">﴿وَأَذِّن فِي النَّاسِ بِالْحَجِّ يَأْتُوكَ رِجَالًا﴾</p><p class="by">إعداد فريق الدعوة والتوعية بأكاديمية عين اليقين · تحت إشراف المعلمة د. هالة الجعلي</p></div>
   </div>
+  <div class="book"><div class="book-t"><b>احجز حجك مع عين اليقين</b><span>للاستفسار والحجز تواصلوا معنا</span></div><div class="book-a"><a class="btn green sm" href="https://wa.me/201005005409?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%D8%A7%D9%84%D8%AD%D8%AC%20%D9%85%D8%B9%20%D8%B9%D9%8A%D9%86%20%D8%A7%D9%84%D9%8A%D9%82%D9%8A%D9%86" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.7 11.8 11.8 0 004.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>واتساب</a><a class="btn ghost sm" href="tel:+201005005409"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 005 5L15 12l5 2v4a2 2 0 01-2 2A16 16 0 013 5a2 2 0 012-2z"/></svg>اتصال</a></div></div>
 
   <div class="stack">
     <div class="sec-head"><h2>اختر نوع نسكك</h2><small>تظهر لك الخطوات المناسبة لنسكك</small></div>
@@ -1261,10 +1292,7 @@ $('#plJinan').innerHTML=[['hands','كفالات شهرية للأسر الفقي
 document.querySelectorAll('.plist').forEach(l=>{l.classList.add(l.querySelector('small')?'aligned':'centered');if(!l.querySelector('.tq'))return;l.classList.add('two-line');const it=[...l.children];for(let i=0;i<it.length;i+=2){const row=it.slice(i,i+2);if(!row.some(x=>x.querySelector('.tq')))row.forEach(x=>x.classList.add('one'));}});
 /* ---------- branches & contact ---------- */
 /* عدّلي البيانات هنا: phones أرقام الاتصال (رقم أو اتنين)، wa رقم الواتساب بالكود الدولي من غير +، map لينك جوجل ماب، fb لينك صفحة فيسبوك */
-const CONTACT=[
- {id:'far',name:'أكاديمية الفريدة للقرآن وعلومه',fb:'https://www.facebook.com/alfaridacademy',branches:[{n:'فرع مدينة نصر',phones:[],wa:'',map:''},{n:'فرع التجمع',phones:[],wa:'',map:''}]},
- {id:'ain',name:'دار عين اليقين',fb:'https://www.facebook.com/dar.ain.alyakeen',branches:[{n:'فرع المهندسين',phones:[],wa:'',map:''},{n:'فرع الهرم',phones:[],wa:'',map:''}]},
- {id:'jinan',name:'مؤسسة الجنان للتنمية',fb:'https://www.facebook.com/profile.php?id=100070092484054',branches:[{n:'فرع المهندسين',phones:[],wa:'',map:''}]}];
+const CONTACT=[{"id": "far", "name": "أكاديمية الفريدة للقرآن وعلومه", "fb": "https://www.facebook.com/alfaridacademy", "branches": [{"n": "فرع مدينة نصر", "addr": "٣٥ ش أسماء فهمي، أرض الجولف، مدينة نصر", "map": "https://maps.app.goo.gl/kFArbcV89EwYpFrm8", "phones": [{"t": "+201554458955", "d": "015 5445 8955", "k": "موبايل"}, {"t": "+20224158426", "d": "02 2415 8426", "k": "أرضي"}], "wa": [{"t": "+201554458955", "d": "015 5445 8955", "k": "موبايل"}]}, {"n": "فرع التجمع الخامس", "addr": "ڤيلا ٣٩ عائلي ١، المستثمرين الجنوبية، محور جمال عبد الناصر، التجمع الخامس", "map": "https://maps.google.com/?q=29.999439,31.479607", "phones": [{"t": "+201022206686", "d": "010 2220 6686", "k": "موبايل"}, {"t": "+201099530058", "d": "010 9953 0058", "k": "موبايل"}, {"t": "+20226126150", "d": "02 2612 6150", "k": "أرضي"}], "wa": [{"t": "+201099530058", "d": "010 9953 0058", "k": "موبايل"}]}]}, {"id": "ain", "name": "دار عين اليقين", "fb": "https://www.facebook.com/dar.ain.alyakeen", "branches": [{"n": "فرع المهندسين", "addr": "٩٥ ش الحسين، من محيي الدين أبو العز، المهندسين", "map": "https://maps.app.goo.gl/qWiRX", "phones": [{"t": "+20233378027", "d": "02 3337 8027", "k": "أرضي"}, {"t": "+20237622137", "d": "02 3762 2137", "k": "أرضي"}, {"t": "+201060472644", "d": "010 6047 2644", "k": "موبايل"}, {"t": "+201005005409", "d": "010 0500 5409", "k": "موبايل"}], "wa": [{"t": "+201060472644", "d": "010 6047 2644", "k": "موبايل"}, {"t": "+201005005409", "d": "010 0500 5409", "k": "موبايل"}]}, {"n": "فرع الهرم", "addr": "٢ ش مصطفى الدالي، متفرع من ش العريش (من عبد اللطيف عبد الحميد)، الهرم", "map": "https://maps.app.goo.gl/zWs7w", "phones": [{"t": "+201107034781", "d": "011 0703 4781", "k": "موبايل"}, {"t": "+20233858721", "d": "02 3385 8721", "k": "أرضي"}], "wa": [{"t": "+201107034781", "d": "011 0703 4781", "k": "موبايل"}]}]}, {"id": "jinan", "name": "مؤسسة الجنان للتنمية", "fb": "https://www.facebook.com/profile.php?id=100070092484054", "branches": [{"n": "فرع المهندسين", "addr": "٩٥ ش الحسين، من محيي الدين أبو العز، المهندسين", "map": "https://maps.app.goo.gl/qWiRX", "phones": [{"t": "+20233378027", "d": "02 3337 8027", "k": "أرضي"}, {"t": "+20237622137", "d": "02 3762 2137", "k": "أرضي"}, {"t": "+201060472644", "d": "010 6047 2644", "k": "موبايل"}, {"t": "+201005005409", "d": "010 0500 5409", "k": "موبايل"}], "wa": [{"t": "+201060472644", "d": "010 6047 2644", "k": "موبايل"}, {"t": "+201005005409", "d": "010 0500 5409", "k": "موبايل"}]}]}];
 const CI={pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0114 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
  phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 005 5L15 12l5 2v4a2 2 0 01-2 2A16 16 0 013 5a2 2 0 012-2z"/></svg>',
  wa:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.7 11.8 11.8 0 004.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>',
@@ -1272,10 +1300,18 @@ const CI={pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke
 const BR={};CONTACT.forEach(e=>BR[e.id]=e.branches.map(b=>b.n));
 const brHTML=id=>`<div class="branches">${BR[id].map(n=>`<span>${CI.pin}${n}</span>`).join('')}</div>`;
 document.querySelectorAll('[data-branches]').forEach(el=>{el.innerHTML=brHTML(el.dataset.branches);});
+const numList=(id,arr,wa)=>`<div class="cphones" id="${id}" hidden>${arr.map(p=>`<a href="${wa?'https://wa.me/'+p.t.replace('+',''):'tel:'+p.t}"${wa?' target="_blank" rel="noopener"':''}>${wa?CI.wa.replace('<svg','<svg width="14" height="14"'):CI.phone.replace('<svg','<svg width="14" height="14"')} <span dir="ltr">${p.d}</span><small>${wa?'واتساب':p.k}</small></a>`).join('')}</div>`;
 $('#contactList').innerHTML=CONTACT.map(e=>`<div class="cent"><div class="cent-h">${CI.pin}<span>${e.name}</span><span class="cact fb"><a class="fbk${e.fb?'':' off'}" href="${e.fb||'#'}" target="_blank" rel="noopener" aria-label="صفحة ${e.name} على فيسبوك">${CI.fb}</a></span></div>`+
- e.branches.map((b,i)=>{const ph=b.phones||[];const call=ph.length===1?`<a href="tel:${ph[0]}" aria-label="اتصال ${b.n}">${CI.phone}</a>`:`<button class="${ph.length?'':'off'}" data-phones="${e.id}-${i}" aria-label="أرقام ${b.n}">${CI.phone}</button>`;
-  return `<div class="cbr"><div class="cbr-row"><b>${b.n}</b><span class="cact">${call}<a class="wa${b.wa?'':' off'}" href="${b.wa?'https://wa.me/'+b.wa:'#'}" target="_blank" rel="noopener" aria-label="واتساب ${b.n}">${CI.wa}</a><a class="${b.map?'':'off'}" href="${b.map||'#'}" target="_blank" rel="noopener" aria-label="موقع ${b.n} على الخريطة">${CI.pin}</a></span></div>${ph.length>1?`<div class="cphones" id="ph-${e.id}-${i}" hidden>${ph.map(p=>`<a href="tel:${p}">${CI.phone.replace('<svg','<svg width="14" height="14"')} ${p}</a>`).join('')}</div>`:''}</div>`;}).join('')+`</div>`).join('');
-$('#contactList').addEventListener('click',e=>{const b=e.target.closest('[data-phones]');if(!b)return;const box=document.getElementById('ph-'+b.dataset.phones);if(box)box.hidden=!box.hidden;});
+ e.branches.map((b,i)=>{const ph=b.phones||[],wa=b.wa||[],id=e.id+'-'+i;
+  const call=ph.length===1?`<a href="tel:${ph[0].t}" aria-label="اتصال ${b.n}">${CI.phone}</a>`:`<button class="${ph.length?'':'off'}" data-box="ph-${id}" aria-label="أرقام ${b.n}">${CI.phone}</button>`;
+  const w=wa.length===1?`<a class="wa" href="https://wa.me/${wa[0].t.replace('+','')}" target="_blank" rel="noopener" aria-label="واتساب ${b.n}">${CI.wa}</a>`:`<button class="wa${wa.length?'':' off'}" data-box="wa-${id}" aria-label="واتساب ${b.n}">${CI.wa}</button>`;
+  return `<div class="cbr"><div class="cbr-row"><b>${b.n}</b><span class="cact">${call}${w}<a class="${b.map?'':'off'}" href="${b.map||'#'}" target="_blank" rel="noopener" aria-label="موقع ${b.n} على الخريطة">${CI.pin}</a></span></div>${b.addr?`<a class="caddr" href="${b.map||'#'}" target="_blank" rel="noopener">${b.addr}</a>`:''}${ph.length>1?numList('ph-'+id,ph,false):''}${wa.length>1?numList('wa-'+id,wa,true):''}</div>`;}).join('')+`</div>`).join('');
+const FOLLOW=[["tg", "قناة «من أحب لقاء الله»", "حلقات المعلمة د. هالة الجعلي", "http://t.me/joinchat/AAAAAEuh7C6_fK2JoR5VOA", "للنساء والفتيات فقط، ولا يُسمح بدخول الرجال أو إسماعهم للأمانة"], ["fb", "صفحة المعلمة د. هالة الجعلي", "", "https://www.facebook.com/Dr-Hala-Algaaly-%D8%AF-%D9%87%D8%A7%D9%84%D8%A9-%D8%A7%D9%84%D8%AC%D8%B9%D9%84%D9%8A-102649518265824/", ""], ["fb", "أكاديمية الفريدة للقرآن وعلومه", "", "https://www.facebook.com/alfaridacademy", ""], ["fb", "دار عين اليقين", "", "https://www.facebook.com/dar.ain.alyakeen", ""], ["fb", "مؤسسة الجنان للتنمية", "", "https://www.facebook.com/profile.php?id=100070092484054", ""], ["tg", "مقرأة عين اليقين", "لتلاوة القرآن وتصحيح الأداء يوميًا صباحًا ومساءً، ونختم القرآن مرتين شهريًا", "https://t.me/+ydg--8r2S_1hNTg0", ""], ["tg", "قناة «فذكّر» للفردوس نسعى", "الورد القرآني اليومي والأذكار والمقاطع الدعوية", "https://t.me/fazaker_Ainalyakeen", ""], ["fb", "أكاديمية براعم عين اليقين", "لمتابعة نشاط البراعم", "https://www.facebook.com/profile.php?id=100064394933264&sk=photos", ""], ["fb", "أكاديمية فتيات عين اليقين", "لمتابعة نشاط الفتيات", "https://www.facebook.com/107372337799869", ""]];
+const FI={tg:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 3.5L2.8 10.8c-1.3.5-1.3 1.2-.2 1.6l4.8 1.5 1.8 5.6c.2.6.1.9.8.9.5 0 .7-.2 1-.5l2.4-2.3 4.9 3.6c.9.5 1.6.2 1.8-.8l3.3-15.4c.3-1.4-.5-2-1.9-1.5zM8.9 13.6l9.4-5.9c.5-.3.9-.1.5.2l-8 7.3-.3 3.3z"/></svg>',fb:CI.fb};
+$('#followList').innerHTML=FOLLOW.map(([k,t,d,u,w])=>`<a class="fl" href="${u}" target="_blank" rel="noopener"><span class="ic ${k}">${FI[k]}</span><span><b>${t}</b>${d?`<small>${d}</small>`:''}${w?`<small class="warn">${w}</small>`:''}</span><span class="go">${k==='tg'?'انضم':'تابع'} ←</span></a>`).join('');
+{const fu=t=>(FOLLOW.find(x=>x[1]===t)||[])[3];const LK={'مقرأة عين اليقين':fu('مقرأة عين اليقين'),'نشاط فتيات عين اليقين':fu('أكاديمية فتيات عين اليقين'),'أكاديمية براعم عين اليقين':fu('أكاديمية براعم عين اليقين')};
+ document.querySelectorAll('#plAin .pitem').forEach(el=>{const t=el.querySelector('b').textContent.trim();const u=LK[t];if(!u)return;const a=document.createElement('a');a.className=el.className+' link';a.href=u;a.target='_blank';a.rel='noopener';a.innerHTML=el.innerHTML;a.querySelector('span:last-child').insertAdjacentHTML('beforeend','<span class="plink">'+(u.includes('t.me')?'انضم على تيليجرام':'تابع على فيسبوك')+' ←</span>');el.replaceWith(a);});}
+$('#contactList').addEventListener('click',e=>{const b=e.target.closest('[data-box]');if(!b)return;const box=document.getElementById(b.dataset.box);if(!box)return;const o=box.hidden;b.closest('.cbr').querySelectorAll('.cphones').forEach(x=>x.hidden=true);box.hidden=!o;});
 
 /* ---------- duaa ---------- */
 const DUA={
