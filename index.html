@@ -884,7 +884,7 @@ footer p{font-size:.85rem;color:var(--muted)}
   <div class="card trip-card"><div class="trip-sum"><div class="field" style="flex:1;min-width:200px"><label for="tripSel">رحلتي الحالية</label><select id="tripSel" class="tripSel"></select></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn ghost sm editTrip">تعديل الرحلة</button><button class="btn green sm newTrip">+ إضافة رحلة عمرة / حج</button></div></div>
     <div class="daybar" id="daybar"></div></div>
   <div class="card"><div class="card-head"><h3>الصلوات</h3><span class="score" id="prScore"></span></div><p class="muted" style="font-size:.82rem">اضغط على الدائرة عند إتمام العبادة</p><div class="grid-wrap"><table class="pr" id="prTable"></table></div></div>
-  <div class="card"><h3>السنن النوافل</h3><div class="two" id="nafl"></div></div>
+  <div class="card"><h3>صلاة النوافل</h3><div class="two" id="nafl"></div></div>
   <div class="card"><h3>ورد القرآن</h3>
     <div class="two"><div class="field"><label for="qFrom">من صفحة</label><input type="number" id="qFrom" min="1" max="604" inputmode="numeric"></div><div class="field"><label for="qTo">إلى صفحة</label><input type="number" id="qTo" min="1" max="604" inputmode="numeric"></div></div>
     <p class="muted" id="qPages" style="font-size:.85rem"></p></div>
@@ -1653,7 +1653,7 @@ function wireSetup(slot,v){const isNew=v.dataset.editing==='new'||!trip();const 
 
 /* ---------- tracker ---------- */
 const PRAYERS=['الفجر','الظهر','العصر','المغرب','العشاء'];
-const COLS=['ترديد الأذان','الصلاة على وقتها','الصلاة في جماعة','السنن الرواتب','أذكار بعد الصلاة','السنن والنوافل'];
+const COLS=['ترديد الأذان','الصلاة على وقتها','الصلاة في جماعة','السنن الرواتب','أذكار بعد الصلاة','السنن النوافل'];
 const NAFL=[['duha','صلاة الضحى'],['qiyam','قيام الليل',1],['n1','نوافل بين الظهر والعصر'],['n2','نوافل بين المغرب والعشاء']];
 const ADH=[['sabah','أذكار الصباح'],['masa','أذكار المساء'],['wake','أذكار الاستيقاظ'],['sleep','أذكار النوم']];
 const TB=['أستغفر الله','اللهم صلِّ على النبي','سبحان الله','الحمد لله','لا إله إلا الله','الله أكبر'];
