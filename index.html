@@ -1036,6 +1036,11 @@ footer p{font-size:.85rem;color:var(--muted)}
     <h3>تسجيل الدخول</h3>
     <p class="muted" style="font-size:.88rem">ادخل بالبريد الإلكتروني الذي سجّلت به لتتابع عباداتك ورحلاتك.</p>
     <div class="field"><label for="siEmail">البريد الإلكتروني</label><input type="email" id="siEmail" autocomplete="email" inputmode="email" dir="ltr" placeholder="name@example.com" required></div>
+    <div class="siAdmin stack" style="gap:8px" hidden>
+      <p class="muted" style="font-size:.85rem;margin:0">هذا بريد إدارة. اكتب كلمة المرور للدخول إلى لوحة الإدارة.</p>
+      <div class="field"><label for="siPw">كلمة المرور</label><input type="password" id="siPw" dir="ltr" autocomplete="current-password"></div>
+      <p style="font-size:.82rem;margin:0;display:flex;gap:12px;flex-wrap:wrap"><a class="siSetup" href="admin.html">أول مرة؟ اختر كلمة مرور</a><a class="siForgot" href="admin.html">نسيت كلمة المرور؟</a><button type="button" class="linkbtn siAsMember">الدخول إلى عباداتي بدلًا من ذلك</button></p>
+    </div>
     <p class="siErr" style="color:#c0392b;font-size:.85rem" aria-live="polite"></p>
     <button type="submit" class="btn green">دخول</button>
     <p class="muted" style="font-size:.9rem;text-align:center">ليس لديك حساب؟ <button type="button" class="linkbtn goSignup">أنشئ حسابًا جديدًا</button></p>
@@ -1056,7 +1061,7 @@ footer p{font-size:.85rem;color:var(--muted)}
     <div class="field"><label>النوع</label><div class="ttype rgGender"><button type="button" data-v="male" aria-pressed="false">ذكر</button><button type="button" data-v="female" aria-pressed="false">أنثى</button></div></div>
     <div class="field"><label>هل أنت مسافر للعمرة / الحج مع عين اليقين؟</label><div class="ttype rgWith"><button type="button" data-v="yes" aria-pressed="false">نعم</button><button type="button" data-v="no" aria-pressed="false">لا</button></div></div>
     <div class="femaleOnly stack" hidden>
-      <div class="field"><label for="rgRel">هل أنتِ من عين اليقين؟</label><select id="rgRel"><option value="">اختاري</option><option value="student">طالبة</option><option value="teacher">معلمة</option><option value="alumni">خريجة</option><option value="none">لست طالبة ولا خريجة</option></select></div>
+      <div class="field"><label for="rgRel">هل أنتِ من عين اليقين؟</label><select id="rgRel"><option value="">اختاري</option><option value="student">طالبة</option><option value="teacher">معلمة</option><option value="alumni">خريجة</option><option value="none">لم أدرس في عين اليقين من قبل</option></select></div>
     </div>
     <p class="rgErr" style="color:#c0392b;font-size:.85rem" aria-live="polite"></p>
     <div style="display:flex;gap:10px;flex-wrap:wrap"><button type="submit" class="btn green">حفظ ومتابعة</button><button type="button" class="btn ghost cancelReg" hidden>إلغاء</button></div>
@@ -1601,7 +1606,12 @@ document.addEventListener('click',e=>{const v=e.target.closest('.view');if(!v)re
  else if(e.target.closest('.goSignin')){v.dataset.auth='';refreshPriv(true);window.scrollTo(0,0);}});
 function wireSignin(slot,v){const f=slot.querySelector('.signinForm'),em=f.querySelector('#siEmail'),err=f.querySelector('.siErr');
  f.onsubmit=e=>{e.preventDefault();const x=normEmail(em.value);if(!okEmail(x))return err.textContent='اكتب بريدًا إلكترونيًا صحيحًا.',em.focus();
-  if(Store.mode==='supa'){const btn=f.querySelector('[type=submit]');if(btn)btn.disabled=true;err.textContent='';rpc('ay_sign_in',{p_email:x}).then(async d=>{if(!d){err.textContent='لا يوجد حساب بهذا البريد. أنشئ حسابًا جديدًا.';return;}setTok(d.token);await supaLoad();v.dataset.auth='';refreshPriv(true);}).catch(()=>{err.textContent='تعذّر الاتصال، تأكد من الإنترنت وحاول مرة أخرى.';}).finally(()=>{if(btn)btn.disabled=false;});return;}
+  if(Store.mode==='supa'){const btn=f.querySelector('[type=submit]');const adm=f.querySelector('.siAdmin'),pw=f.querySelector('#siPw');
+   if(!adm.hidden&&!f.dataset.member){if(!pw.value)return err.textContent='اكتب كلمة المرور.',pw.focus();btn.disabled=true;err.textContent='';
+    fetch(SUPA.url+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:SUPA.key,'Content-Type':'application/json'},body:JSON.stringify({email:x,password:pw.value})}).then(r=>r.ok?r.json():Promise.reject()).then(j=>{try{sessionStorage.setItem('ainyaqeen-admin',JSON.stringify({access:j.access_token,refresh:j.refresh_token,exp:Date.now()+(j.expires_in||3600)*1000}))}catch(e){}location.href='admin.html';}).catch(()=>{err.textContent='كلمة المرور غير صحيحة.';btn.disabled=false;});return;}
+   if(!f.dataset.member&&adm.hidden){btn.disabled=true;err.textContent='';rpc('ay_is_admin',{p_email:x}).then(isA=>{if(isA){adm.hidden=false;f.querySelector('.siSetup').href='admin.html?mode=setup&email='+encodeURIComponent(x);f.querySelector('.siForgot').href='admin.html?mode=forgot&email='+encodeURIComponent(x);f.querySelector('.siAsMember').onclick=()=>{f.dataset.member='1';adm.hidden=true;f.requestSubmit();};btn.disabled=false;pw.focus();}else{f.dataset.member='1';btn.disabled=false;f.requestSubmit();}}).catch(()=>{f.dataset.member='1';btn.disabled=false;f.requestSubmit();});return;}
+   delete f.dataset.member;
+if(Store.mode==='supa'){const btn=f.querySelector('[type=submit]');if(btn)btn.disabled=true;err.textContent='';rpc('ay_sign_in',{p_email:x}).then(async d=>{if(!d){err.textContent='لا يوجد حساب بهذا البريد. أنشئ حسابًا جديدًا.';return;}setTok(d.token);await supaLoad();v.dataset.auth='';refreshPriv(true);}).catch(()=>{err.textContent='تعذّر الاتصال، تأكد من الإنترنت وحاول مرة أخرى.';}).finally(()=>{if(btn)btn.disabled=false;});return;}}
   if(Store.mode==='local'){const r=readAcct(x);if(!r||!r.prof||!r.prof.reg)return err.textContent='لا يوجد حساب بهذا البريد. أنشئ حسابًا جديدًا.';setSess(x);loadLocal();}
   else{if(!Store.prof.reg||normEmail(Store.prof.reg.email)!==x)return err.textContent='لا يوجد حساب بهذا البريد. أنشئ حسابًا جديدًا.';setSess(x);}
   v.dataset.auth='';refreshPriv(true);};}

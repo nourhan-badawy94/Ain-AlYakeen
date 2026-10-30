@@ -38,6 +38,8 @@ td.ltr{direction:ltr;text-align:right}
 tr:last-child td{border-bottom:0}
 .note{font-size:.8rem;color:var(--muted);margin-top:10px}
 [hidden]{display:none!important}
+.links{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}.lnk{font:inherit;font-size:.85rem;background:none;border:0;padding:0;color:var(--green);cursor:pointer;text-decoration:underline}
+.ok{color:var(--green);font-size:.9rem;margin:0;line-height:1.8}
 </style>
 </head>
 <body>
@@ -47,16 +49,20 @@ tr:last-child td{border-bottom:0}
     <p class="muted" style="margin:0;font-size:.9rem">خاصة بإدارة عين اليقين فقط.</p>
     <form id="loginForm" style="display:flex;flex-direction:column;gap:12px">
       <div><label for="em">البريد الإلكتروني</label><input id="em" type="email" dir="ltr" autocomplete="username" required></div>
-      <div><label for="pw">كلمة المرور</label><input id="pw" type="password" dir="ltr" autocomplete="current-password" required></div>
+      <div id="pwWrap"><label for="pw" id="pwLbl">كلمة المرور</label><input id="pw" type="password" dir="ltr" autocomplete="current-password"></div>
+      <div id="pw2Wrap" hidden><label for="pw2">تأكيد كلمة المرور</label><input id="pw2" type="password" dir="ltr" autocomplete="new-password"></div>
       <p class="err" id="loginErr" aria-live="polite"></p>
-      <button class="btn" type="submit">دخول</button>
+      <p class="ok" id="loginOk" aria-live="polite" hidden></p>
+      <button class="btn" type="submit" id="goBtn">دخول</button>
     </form>
+    <div class="links"><button class="lnk" data-mode="setup">أول مرة؟ اختاري كلمة مرور</button><button class="lnk" data-mode="forgot">نسيت كلمة المرور؟</button><button class="lnk" data-mode="login" hidden>رجوع لتسجيل الدخول</button></div>
+    <a class="lnk" href="./" style="text-align:center">العودة إلى الموقع</a>
   </section>
 
   <section id="dataView" hidden>
     <header>
       <h1>المسجلون في عباداتي</h1>
-      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="csvBtn">تنزيل Excel (CSV)</button><button class="btn ghost" id="refreshBtn">تحديث</button><button class="btn ghost" id="outBtn">تسجيل الخروج</button></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn ghost" href="./" style="text-decoration:none">الموقع</a><button class="btn" id="csvBtn">تنزيل Excel (CSV)</button><button class="btn ghost" id="refreshBtn">تحديث</button><button class="btn ghost" id="outBtn">تسجيل الخروج</button></div>
     </header>
     <div class="stats" id="stats"></div>
     <div class="tools">
@@ -75,7 +81,7 @@ const AKEY='ainyaqeen-admin';
 let auth=null;try{auth=JSON.parse(sessionStorage.getItem(AKEY)||'null')}catch(e){}
 let rows=[];
 const COLS=[['name','الاسم'],['email','البريد الإلكتروني'],['phone','الموبايل'],['dob','تاريخ الميلاد'],['gender','النوع'],['nationality','الجنسية'],['governorate','المحافظة'],['with_ay','مسافر مع عين اليقين'],['relation','العلاقة بعين اليقين'],['created_at','تاريخ التسجيل'],['last_seen','آخر دخول']];
-const MAP={gender:{male:'ذكر',female:'أنثى'},with_ay:{yes:'نعم',no:'لا'},relation:{student:'طالبة',teacher:'معلمة',alumni:'خريجة',none:'لست طالبة ولا خريجة'}};
+const MAP={gender:{male:'ذكر',female:'أنثى'},with_ay:{yes:'نعم',no:'لا'},relation:{student:'طالبة',teacher:'معلمة',alumni:'خريجة',none:'لم أدرس في عين اليقين من قبل'}};
 const fmtDT=v=>v?new Date(v).toLocaleString('ar-EG',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
 const val=(r,k)=>{const v=r[k];if(v==null)return'';if(MAP[k])return MAP[k][v]||v;if(k==='created_at'||k==='last_seen')return fmtDT(v);return String(v);};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -114,12 +120,46 @@ async function show(){
   try{await load();$('#loginView').hidden=true;$('#dataView').hidden=false;render();}
   catch(e){sessionStorage.removeItem(AKEY);auth=null;$('#dataView').hidden=true;$('#loginView').hidden=false;
     $('#loginErr').textContent=e.message==='not_admin'?'هذا الحساب ليس له صلاحية الإدارة.':'انتهت الجلسة، سجّل الدخول مرة أخرى.';}}
-$('#loginForm').onsubmit=async e=>{e.preventDefault();const b=e.target.querySelector('button');b.disabled=true;$('#loginErr').textContent='';
-  try{await login($('#em').value.trim().toLowerCase(),$('#pw').value);await show();}catch(err){$('#loginErr').textContent='البريد أو كلمة المرور غير صحيحة.';}finally{b.disabled=false;}};
+const BACK=location.origin+location.pathname;
+const H={apikey:SUPA.key,'Content-Type':'application/json'};
+async function isAdmin(e){const r=await fetch(SUPA.url+'/rest/v1/rpc/ay_is_admin',{method:'POST',headers:H,body:JSON.stringify({p_email:e})});return r.ok&&(await r.json())===true;}
+let mode='login';
+function setMode(m){mode=m;$('#loginErr').textContent='';$('#loginOk').hidden=true;
+  $('#pwWrap').hidden=m==='forgot';$('#pw2Wrap').hidden=!(m==='setup'||m==='reset');$('#em').closest('div').hidden=m==='reset';
+  $('#pwLbl').textContent=m==='login'?'كلمة المرور':'كلمة المرور الجديدة (٨ أحرف على الأقل)';
+  $('#goBtn').textContent={login:'دخول',setup:'إنشاء كلمة المرور',forgot:'إرسال رابط إعادة التعيين',reset:'حفظ كلمة المرور'}[m];
+  document.querySelectorAll('.lnk[data-mode]').forEach(b=>b.hidden=b.dataset.mode===m||(m==='reset'));}
+document.querySelectorAll('.lnk[data-mode]').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+const okMsg=t=>{$('#loginOk').textContent=t;$('#loginOk').hidden=false;};
+$('#loginForm').onsubmit=async e=>{e.preventDefault();const b=$('#goBtn');const em=$('#em').value.trim().toLowerCase(),pw=$('#pw').value,pw2=$('#pw2').value;
+  $('#loginErr').textContent='';$('#loginOk').hidden=true;
+  if(mode!=='reset'&&!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em))return $('#loginErr').textContent='اكتب بريدًا إلكترونيًا صحيحًا.';
+  if((mode==='setup'||mode==='reset')&&pw.length<8)return $('#loginErr').textContent='كلمة المرور لازم تكون ٨ أحرف على الأقل.';
+  if((mode==='setup'||mode==='reset')&&pw!==pw2)return $('#loginErr').textContent='كلمتا المرور غير متطابقتين.';
+  b.disabled=true;
+  try{
+    if(mode==='login'){await login(em,pw);await show();}
+    else if(mode==='setup'){if(!(await isAdmin(em)))throw new Error('notadmin');
+      const r=await fetch(SUPA.url+'/auth/v1/signup?redirect_to='+encodeURIComponent(BACK),{method:'POST',headers:H,body:JSON.stringify({email:em,password:pw})});
+      if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error(/registered|exists/i.test(j.msg||j.message||'')?'exists':'fail');}
+      okMsg('أرسلنا رسالة تأكيد إلى بريدك. افتحيها واضغطي على الرابط، وبعدها ستدخلين لوحة الإدارة مباشرة.');}
+    else if(mode==='forgot'){if(!(await isAdmin(em)))throw new Error('notadmin');
+      await fetch(SUPA.url+'/auth/v1/recover?redirect_to='+encodeURIComponent(BACK),{method:'POST',headers:H,body:JSON.stringify({email:em})});
+      okMsg('لو البريد مسجّل كمدير، هيوصلك رابط لإعادة تعيين كلمة المرور خلال دقائق.');}
+    else if(mode==='reset'){const r=await fetch(SUPA.url+'/auth/v1/user',{method:'PUT',headers:Object.assign({Authorization:'Bearer '+auth.access},H),body:JSON.stringify({password:pw})});
+      if(!r.ok)throw new Error('fail');await show();}
+  }catch(err){$('#loginErr').textContent={notadmin:'هذا البريد ليس من بريد الإدارة.',exists:'هذا البريد له كلمة مرور بالفعل. استخدمي «نسيت كلمة المرور؟».'}[err.message]||(mode==='login'?'البريد أو كلمة المرور غير صحيحة.':'حدث خطأ، حاولي مرة أخرى.');}
+  finally{b.disabled=false;}};
 $('#q').oninput=render;$('#fg').onchange=render;$('#fn').onchange=render;
 $('#csvBtn').onclick=csv;$('#refreshBtn').onclick=show;
 $('#outBtn').onclick=()=>{sessionStorage.removeItem(AKEY);auth=null;rows=[];$('#dataView').hidden=true;$('#loginView').hidden=false;$('#pw').value='';};
-if(auth)show();
+(()=>{const h=new URLSearchParams(location.hash.slice(1));const qs=new URLSearchParams(location.search);
+  if(qs.get('email'))$('#em').value=qs.get('email');
+  if(qs.get('mode'))setMode(qs.get('mode'));
+  if(h.get('access_token')){auth={access:h.get('access_token'),refresh:h.get('refresh_token'),exp:Date.now()+(+h.get('expires_in')||3600)*1000};sessionStorage.setItem(AKEY,JSON.stringify(auth));
+    history.replaceState(null,'',location.pathname);if(h.get('type')==='recovery'){setMode('reset');return;}}
+  if(h.get('error_description')){$('#loginErr').textContent='الرابط غير صالح أو انتهت صلاحيته، اطلبي رابطًا جديدًا.';history.replaceState(null,'',location.pathname);}
+  if(auth)show();})();
 </script>
 </body>
 </html>
