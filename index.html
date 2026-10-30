@@ -1237,7 +1237,7 @@ const mzI={
 };
 const BAN='<svg class="ban" viewBox="0 0 44 44" fill="none"><circle cx="34" cy="10" r="7" fill="var(--surface)" stroke="#c0392b" stroke-width="2"/><path d="M29.5 14.5l9-9" stroke="#c0392b" stroke-width="2"/></svg>';
 const MZ=[['razor','إزالة الشعر بحلق أو قطع أو نتف'],['nail','تقليم الأظافر'],['perfume','التطيّب على البدن أو ملابس الإحرام بعد الإحرام، ويجوز التطيّب على البدن قبل الإحرام'],['bird','التعرض للصيد البري بالقتل أو تنفير الطيور'],['cap','تغطية الرأس بملاصق (كالطاقية) للرجال دون النساء، ويجوز الاستظلال بالشمسية'],['shirt','لبس المخيط للرجال دون النساء'],['glove','لبس النقاب أو القفازين للنساء'],['rings','عقد النكاح أو الخطبة'],['couple','الجماع'],['heart','المباشرة بشهوة']];
-$('#mz').innerHTML=MZ.map(([k,t],i)=>`<li><span class="ico">${mzI[k]}${BAN}</span><span class="n">${AR(i+1)}</span><span>${t}</span></li>`).join('');
+$('#mz').innerHTML=MZ.map(([k,t],i)=>`<li><span class="ico">${mzI[k]}${BAN}</span><span>${t}</span></li>`).join('');
 
 /* ---------- hajj ---------- */
 const HAJJ_BASE=[
