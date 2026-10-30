@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
@@ -6,18 +5,7 @@
 <title>عين اليقين</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#1d3a5c">
-
-<!-- Website description -->
-<meta name="description" content="عين اليقين: برامج تعليم القرآن الكريم وعلومه">
-
-<!-- WhatsApp and social media preview -->
-<meta property="og:type" content="website">
-<meta property="og:title" content="عين اليقين">
-<meta property="og:description" content="عين اليقين: برامج تعليم القرآن الكريم وعلومه">
-<meta property="og:url" content="https://ainalyakeen.pages.dev/">
-<meta property="og:image" content="https://ainalyakeen.pages.dev/icon-512.png">
-<meta property="og:locale" content="ar_AR">
-
+<meta name="description" content="عين اليقين: برامج القرآن ورحلات العمرة والحج">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -896,7 +884,7 @@ footer p{font-size:.85rem;color:var(--muted)}
   <div class="card trip-card"><div class="trip-sum"><div class="field" style="flex:1;min-width:200px"><label for="tripSel">رحلتي الحالية</label><select id="tripSel" class="tripSel"></select></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn ghost sm editTrip">تعديل الرحلة</button><button class="btn green sm newTrip">+ إضافة رحلة عمرة / حج</button></div></div>
     <div class="daybar" id="daybar"></div></div>
   <div class="card"><div class="card-head"><h3>الصلوات</h3><span class="score" id="prScore"></span></div><p class="muted" style="font-size:.82rem">اضغط على الدائرة عند إتمام العبادة</p><div class="grid-wrap"><table class="pr" id="prTable"></table></div></div>
-  <div class="card"><h3>السنن والنوافل</h3><div class="two" id="nafl"></div></div>
+  <div class="card"><h3>السنن النوافل</h3><div class="two" id="nafl"></div></div>
   <div class="card"><h3>ورد القرآن</h3>
     <div class="two"><div class="field"><label for="qFrom">من صفحة</label><input type="number" id="qFrom" min="1" max="604" inputmode="numeric"></div><div class="field"><label for="qTo">إلى صفحة</label><input type="number" id="qTo" min="1" max="604" inputmode="numeric"></div></div>
     <p class="muted" id="qPages" style="font-size:.85rem"></p></div>
@@ -1137,7 +1125,7 @@ const chev='<svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="n
 /* ---------- umrah steps ---------- */
 const DHIKR_SAFA='اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ، أَنْجَزَ وَعْدَهُ، وَنَصَرَ عَبْدَهُ، وَهَزَمَ الْأَحْزَابَ وَحْدَهُ';
 const steps=[
- {k:'ihram',t:'الإحرام',cap:'معتمرون بملابس الإحرام في مسجد الميقات',b:`<p>تُعلن الطائرات اقتراب محاذاة الميقات قبل الوصول إليه بزمن كافٍ، ثم تعيد التنبيه عند المحاذاة. استعد بلبس الإحرام وإزالة ما يُحظر حال الإحرام قبل الإعلان بمدة كافية.</p>
+ {k:'ihram',t:'الإحرام',cap:'معتمرون بملابس الإحرام على متن الطائرة',b:`<p>تُعلن الطائرات اقتراب محاذاة الميقات قبل الوصول إليه بزمن كافٍ، ثم تعيد التنبيه عند المحاذاة. استعد بلبس الإحرام وإزالة ما يُحظر حال الإحرام قبل الإعلان بمدة كافية.</p>
  <p><b>النية محلّها القلب ولا يُتلفّظ بها</b>، وإنما يُتلفّظ بالتلبية مع ذكر نوع النسك: عمرة عن نفسي، أو عمّن أنوب عنه. (وفي الحج يُذكر نوع النسك: حج متمتع أو قارن أو مفرد).</p>
  <div class="quote"><p class="sacred">لَبَّيْكَ اللَّهُمَّ عُمْرَةً، عَنْ نَفْسِي، خَالِصَةً لِوَجْهِكَ، لَا سُمْعَةَ فِيهَا وَلَا رِيَاءَ</p></div>
  <p>ولا مانع من إضافة الاشتراط عند الخوف من عدم التمكن من إتمام النسك لمرض أو ظرف متوقع:</p>
@@ -1168,7 +1156,7 @@ const steps=[
  <p>بين العلمين الأخضرين (الأضواء الخضراء) يُسنّ الإسراع في المشي للرجال، مع الدعاء:</p>
  <div class="quote"><p class="sacred">رَبِّ اغْفِرْ وَارْحَمْ، وَاعْفُ وَتَكَرَّمْ، وَتَجَاوَزْ عَمَّا تَعْلَمُ، إِنَّكَ أَنْتَ الْأَعَزُّ الْأَكْرَمُ. اللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى وَالْعَفَافَ وَالْغِنَى. اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ</p></div>
  <p>الذهاب من الصفا إلى المروة شوط، والرجوع من المروة إلى الصفا شوط، حتى نكمل ٧ أشواط تنتهي عند المروة.</p>`},
- {k:'cut',img:false,t:'التقصير أو الحلق',b:`<p>بعد انتهاء السعي عند المروة يكون التحلل:</p><ul class="dir-list"><li><b>للرجال:</b> الحلق أو التقصير، <b>والحلق أفضل</b> من التقصير.</li><li><b>للنساء:</b> تجمع شعرها كله وتأخذ من أطرافه قدر عُقلة إصبع، <b>وليس من خصلة واحدة أو من جهة واحدة</b> (كالقُصّة). ولها أن تقصّر في الفندق بعد رجوعها، <b>ولا تقصّر في المسعى</b> حتى لا يرى الرجال شعرها.</li></ul>
+ {k:'cut',img:'halq',t:'التحلل',cap:'الحلق بعد انتهاء السعي',b:`<p>بعد انتهاء السعي عند المروة يكون التحلل:</p><ul class="dir-list"><li><b>للرجال:</b> الحلق أو التقصير، <b>والحلق أفضل</b> من التقصير.</li><li><b>للنساء:</b> تجمع شعرها كله وتأخذ من أطرافه قدر عُقلة إصبع، <b>وليس من خصلة واحدة أو من جهة واحدة</b> (كالقُصّة). ولها أن تقصّر في الفندق بعد رجوعها، <b>ولا تقصّر في المسعى</b> حتى لا يرى الرجال شعرها.</li></ul>
  <div class="ihint">إذا أرادت المرأة أن تقصّر في الفندق، <b>تظل على إحرامها حتى تقصّر</b>، فتجتنب جميع محظورات الإحرام إلى أن تقصّر.</div>
  <p>وعند الخروج من المسجد الحرام، نخرج بالقدم اليسرى ونقول:</p>
  <div class="quote"><p class="sacred">بِسْمِ اللَّهِ وَالسَّلَامُ عَلَى رَسُولِ اللَّهِ، اللَّهُمَّ اعْصِمْنِي مِنَ الشَّيْطَانِ</p></div>
