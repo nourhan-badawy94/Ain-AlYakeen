@@ -1501,20 +1501,29 @@ const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${Str
 const todayISO=()=>iso(new Date());
 function loadLocal(){Store.prof={};Store.days={};if(!sess)return;const r=readAcct(sess);if(r){Store.prof=r.prof||{};Store.days=r.days||{};}}
 function saveLocal(){if(!sess)return;try{localStorage.setItem(lkey(sess),JSON.stringify({prof:Store.prof,days:Store.days}))}catch(e){}}
+const SUPA={url:'https://yyvnoxhwojklujmzghep.supabase.co',key:'sb_publishable_5kX5Fb9bHLOqt5xZvymQfQ_U_Ypspi1'};
+const TKEY='ainyaqeen-token';let stok='';try{stok=localStorage.getItem(TKEY)||''}catch(e){}
+const setTok=t=>{stok=t||'';try{t?localStorage.setItem(TKEY,t):localStorage.removeItem(TKEY)}catch(_){}};
+async function rpc(f,b){const r=await fetch(SUPA.url+'/rest/v1/rpc/'+f,{method:'POST',headers:{apikey:SUPA.key,'Content-Type':'application/json'},body:JSON.stringify(b||{})});const tx=await r.text();let j=null;try{j=tx?JSON.parse(tx):null}catch(e){}if(!r.ok){const er=new Error((j&&j.message)||('http_'+r.status));er.code=j&&j.message;throw er;}return j;}
+async function supaLoad(){const d=await rpc('ay_load',{p_token:stok});Store.prof=d.prof||{};Store.days=d.days||{};Store.prof.reg=Object.assign({},Store.prof.reg||{},{email:d.email,name:d.name});setSess(d.email);saveLocal();}
 const wq={},inflight={},lastLocal={};const busy=id=>!!(inflight[id]||(wq[id]&&wq[id].pending)||(Date.now()-(lastLocal[id]||0)<2500));
 function queueWrite(kind,key){
  if(Store.mode==='local'){saveLocal();return;}
- if(Store.mode!=='cloud')return;
+ if(Store.mode==='supa')saveLocal();else if(Store.mode!=='cloud')return;
  const id=kind+':'+(key||'');lastLocal[id]=Date.now();clearTimeout((wq[id]||{}).t);wq[id]=Object.assign(wq[id]||{},{pending:true,t:setTimeout(()=>{wq[id].pending=false;flush(kind,key);},700)});setSync('saving');}
 async function flush(kind,key){const id=kind+':'+(key||'');if(inflight[id]){wq[id].again=true;return;}inflight[id]=true;
- try{const ref=kind==='prof'?profRef:daysCol.doc(key);const data=kind==='prof'?Store.prof:Store.days[key];await ref.set(JSON.parse(JSON.stringify(data||{})));setSync('saved');}
- catch(e){if(e&&(e.code==='invalid_argument'||e.code==='not_granted'||e.code==='revoked')){toLocal('حسابك لا يملك صلاحية الحفظ على هذا الموقع، فتم الحفظ على هذا الجهاز.');}else setSync('error');}
+ try{if(Store.mode==='supa'){if(kind==='prof')await rpc('ay_save_prof',{p_token:stok,p_data:JSON.parse(JSON.stringify(Store.prof||{}))});else await rpc('ay_save_day',{p_token:stok,p_key:key,p_data:JSON.parse(JSON.stringify(Store.days[key]||{}))});setSync('saved');}
+  else{const ref=kind==='prof'?profRef:daysCol.doc(key);const data=kind==='prof'?Store.prof:Store.days[key];await ref.set(JSON.parse(JSON.stringify(data||{})));setSync('saved');}}
+ catch(e){if(Store.mode==='supa')setSync('error');else if(e&&(e.code==='invalid_argument'||e.code==='not_granted'||e.code==='revoked')){toLocal('حسابك لا يملك صلاحية الحفظ على هذا الموقع، فتم الحفظ على هذا الجهاز.');}else setSync('error');}
  finally{inflight[id]=false;lastLocal[id]=Date.now();if(wq[id]&&wq[id].again){wq[id].again=false;flush(kind,key);}}}
 function setSync(st){const el=document.querySelector('.view:not([hidden]) .syncState');if(el)el.textContent=st==='saving'?'جارٍ الحفظ…':st==='saved'?'تم الحفظ في حسابك':st==='error'?'تعذّر الحفظ، سنحاول مرة أخرى':'';}
 function toLocal(note){const keep={prof:Store.prof,days:Store.days};Store.mode='local';Store.note=note||'';loadLocal();
  if(note){Store.prof=Object.assign({},Store.prof,keep.prof);Store.days=Object.assign({},Store.days,keep.days);saveLocal();}
  try{localStorage.setItem(LOPT,'1')}catch(e){}refreshPriv(true);}
 (async()=>{
+ if(!(window.claude&&window.claude.use)){await 0;Store.mode='supa';
+  if(stok){try{await supaLoad();}catch(e){if(e.code==='invalid_session'){setTok('');setSess('');Store.prof={};Store.days={};}else{loadLocal();}}}else{setSess('');Store.prof={};Store.days={};}
+  refreshPriv(true);return;}
  let db=null,user=null;
  const use=n=>(window.claude&&window.claude.use)?window.claude.use(n).catch(()=>null):Promise.resolve(null);
  try{[db,user]=await Promise.race([Promise.all([use('db'),use('user')]),new Promise(r=>setTimeout(()=>r([null,null]),10000))]);}catch(e){}
@@ -1551,6 +1560,7 @@ document.addEventListener('change',e=>{if(e.target.id==='tripSel'){Store.prof.ac
 
 const lockSvg='<svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>';
 function acctBar(){const R=Store.prof.reg||{};const n=R.name||(Store.me&&Store.me.name)||'حسابك';
+ if(Store.mode==='supa')return `<div class="acct"><span class="who"><span></span></span><span style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><span class="pill syncState">محفوظ في حسابك</span><button class="pill signOut" style="border:0;cursor:pointer">تسجيل الخروج</button></span></div>`;
  if(Store.mode==='cloud'){const av=Store.me&&Store.me.avatarUrl?`<img src="${Store.me.avatarUrl}" alt="">`:'';return `<div class="acct"><span class="who">${av}<span></span></span><span style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><button class="pill editReg" style="border:0;cursor:pointer">تعديل بياناتي</button><span class="pill syncState">محفوظ في حسابك</span><button class="pill signOut" style="border:0;cursor:pointer">تسجيل الخروج</button></span></div>`;}
  if(Store.mode==='local')return `<div class="acct"><span class="who"><span></span></span><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="pill editReg" style="border:0;cursor:pointer">تعديل بياناتي</button><button class="pill signOut" style="border:0;cursor:pointer">تسجيل الخروج</button></span></div>`;return'';}
 function fillName(slot){const w=slot.querySelector('.who span:last-child');if(!w)return;const R=Store.prof.reg||{};w.textContent=Store.mode==='local'?((R.name?R.name+' · ':'')+(Store.note||'بياناتك محفوظة على هذا الجهاز فقط')):(R.name||(Store.me&&Store.me.name)||'حسابك');}
@@ -1574,11 +1584,12 @@ document.addEventListener('click',e=>{const v=e.target.closest('.view');if(!v)re
  if(e.target.closest('.editTrip')){v.dataset.editing='edit';refreshPriv(true);window.scrollTo(0,0);}
  else if(e.target.closest('.newTrip')){v.dataset.editing='new';refreshPriv(true);window.scrollTo(0,0);}
  else if(e.target.closest('.editReg')){v.dataset.reg='1';refreshPriv(true);window.scrollTo(0,0);}
- else if(e.target.closest('.signOut')){setSess('');if(Store.mode==='local')loadLocal();document.querySelectorAll('.view').forEach(x=>{x.dataset.auth='';x.dataset.reg='';x.dataset.editing='';});refreshPriv(true);window.scrollTo(0,0);}
+ else if(e.target.closest('.signOut')){if(Store.mode==='supa'){if(stok)rpc('ay_sign_out',{p_token:stok}).catch(()=>{});setTok('');Store.prof={};Store.days={};}setSess('');if(Store.mode==='local')loadLocal();document.querySelectorAll('.view').forEach(x=>{x.dataset.auth='';x.dataset.reg='';x.dataset.editing='';});refreshPriv(true);window.scrollTo(0,0);}
  else if(e.target.closest('.goSignup')){v.dataset.auth='up';refreshPriv(true);window.scrollTo(0,0);}
  else if(e.target.closest('.goSignin')){v.dataset.auth='';refreshPriv(true);window.scrollTo(0,0);}});
 function wireSignin(slot,v){const f=slot.querySelector('.signinForm'),em=f.querySelector('#siEmail'),err=f.querySelector('.siErr');
  f.onsubmit=e=>{e.preventDefault();const x=normEmail(em.value);if(!okEmail(x))return err.textContent='اكتب بريدًا إلكترونيًا صحيحًا.',em.focus();
+  if(Store.mode==='supa'){const btn=f.querySelector('[type=submit]');if(btn)btn.disabled=true;err.textContent='';rpc('ay_sign_in',{p_email:x}).then(async d=>{if(!d){err.textContent='لا يوجد حساب بهذا البريد. أنشئ حسابًا جديدًا.';return;}setTok(d.token);await supaLoad();v.dataset.auth='';refreshPriv(true);}).catch(()=>{err.textContent='تعذّر الاتصال، تأكد من الإنترنت وحاول مرة أخرى.';}).finally(()=>{if(btn)btn.disabled=false;});return;}
   if(Store.mode==='local'){const r=readAcct(x);if(!r||!r.prof||!r.prof.reg)return err.textContent='لا يوجد حساب بهذا البريد. أنشئ حسابًا جديدًا.';setSess(x);loadLocal();}
   else{if(!Store.prof.reg||normEmail(Store.prof.reg.email)!==x)return err.textContent='لا يوجد حساب بهذا البريد. أنشئ حسابًا جديدًا.';setSess(x);}
   v.dataset.auth='';refreshPriv(true);};}
@@ -1615,6 +1626,7 @@ function wireReg(slot,v,signup){const R=Object.assign({},signup?{}:(Store.prof.r
   if(!R.withAY)return err.textContent='اختر هل أنت مسافر مع عين اليقين.';
   if(R.gender==='female'&&!rel.value)return err.textContent='اختاري علاقتك بعين اليقين.',rel.focus();
   const reg={email:mail,name:nm.value.trim(),phone,dob:db.value,gender:R.gender,nationality:nat.value.trim(),governorate:nat.value.trim()==='مصر'?gov.value.trim():'',withAY:R.withAY||'',relation:R.gender==='female'?rel.value:'',at:(Store.prof.reg&&Store.prof.reg.at)||new Date().toISOString(),updated:new Date().toISOString()};
+  if(Store.mode==='supa'&&signup){const btn=f.querySelector('[type=submit]');btn.disabled=true;err.textContent='';rpc('ay_register',{p:reg}).then(d=>{setTok(d.token);setSess(d.email);Store.prof={reg:{email:d.email,name:d.name}};Store.days={};v.dataset.reg='';v.dataset.auth='';queueWrite('prof');refreshPriv(true);}).catch(e=>{err.textContent=e.code==='exists'?'يوجد حساب بهذا البريد بالفعل، سجّل الدخول.':'تعذّر إنشاء الحساب، تأكد من الإنترنت وحاول مرة أخرى.';}).finally(()=>{btn.disabled=false;});return;}
   if(signup){setSess(mail);if(Store.mode==='local'){Store.prof={};Store.days={};}}Store.prof.reg=reg;v.dataset.reg='';v.dataset.auth='';queueWrite('prof');saveRegShared(reg);refreshPriv(true);};}
 async function saveRegShared(reg){if(Store.mode!=='cloud'||!regRef)return;try{await regRef.set(Object.assign({},reg));}catch(e){}}
 function wireSetup(slot,v){const isNew=v.dataset.editing==='new'||!trip();const t=isNew?{type:'umrah',start:todayISO(),days:10}:trip();let type=t.type;
@@ -1834,7 +1846,7 @@ function renderAdhkar(){const c=ADHKAR[dkCat],cnt=dkCount[dkKey()]||(dkCount[dkK
  $('#dkList').innerHTML=c.items.map((d,i)=>{const k=cnt[i]||0,dn=k>=d.n;return `<button class="dk${dn?' done':''}" data-i="${i}"><p class="sacred">${d.t}</p><span class="meta"><span class="note">${d.note||''}</span><span class="cnt">${cntLabel(k,d.n,dn)}</span></span></button>`}).join('');dkProgress();}
 function dkProgress(){const c=ADHKAR[dkCat],cnt=dkCount[dkKey()]||[];const done=c.items.filter((d,i)=>(cnt[i]||0)>=d.n).length;
  $('#dkScore').textContent=AR(done)+' / '+AR(c.items.length);$('#dkBar').style.width=(done/c.items.length*100)+'%';
- if(done===c.items.length){const t=todayISO();if((Store.mode==='cloud'||Store.mode==='local')&&trip()&&tripDates().includes(t)){const d=dayOf(t);if(!d.ad[dkCat]){d.ad[dkCat]=true;queueWrite('day',dKey(trip(),t));}}}}
+ if(done===c.items.length){const t=todayISO();if((Store.mode==='cloud'||Store.mode==='local'||Store.mode==='supa')&&trip()&&tripDates().includes(t)){const d=dayOf(t);if(!d.ad[dkCat]){d.ad[dkCat]=true;queueWrite('day',dKey(trip(),t));}}}}
 $('#seg').onclick=e=>{const b=e.target.closest('button');if(!b)return;dkCat=b.dataset.c;renderAdhkar();};
 $('#dkList').onclick=e=>{const b=e.target.closest('.dk');if(!b)return;const i=+b.dataset.i,d=ADHKAR[dkCat].items[i],cnt=dkCount[dkKey()];
  if((cnt[i]||0)>=d.n)return;cnt[i]=(cnt[i]||0)+1;dkSave();vib(12);const dn=cnt[i]>=d.n;b.classList.toggle('done',dn);const ce=b.querySelector('.cnt');ce.innerHTML=cntLabel(cnt[i],d.n,dn);ce.classList.remove('bump');void ce.offsetWidth;ce.classList.add('bump');fx(b,e,dn);dkProgress();

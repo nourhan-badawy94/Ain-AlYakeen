@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>لوحة الإدارة · عين اليقين</title>
+<link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@800&family=Readex+Pro:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f4f6f3;--surface:#fff;--surface-2:#eef2ee;--ink:#1a2a24;--muted:#66756d;--line:#dde3dd;--navy:#1d3a5c;--green:#2f9a46;--green-soft:#dff0e2;--err:#c0392b}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1720;--surface:#16212c;--surface-2:#1c2a37;--ink:#e6edf2;--muted:#9aa8b4;--line:#2a3a48;--navy:#9cc2e6;--green:#5cc775;--green-soft:#183427;--err:#ff7b6b}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Readex Pro",Tahoma,sans-serif;font-size:15px;line-height:1.6}
+.wrap{max-width:1200px;margin:0 auto;padding:20px 16px 40px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+h1{font-family:Cairo,"Readex Pro",sans-serif;font-weight:800;color:var(--navy);font-size:1.8rem;margin:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px}
+.login{max-width:380px;margin:8vh auto 0;display:flex;flex-direction:column;gap:12px}
+label{font-size:.85rem;color:var(--muted);display:block;margin-bottom:4px}
+input,select{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);color:var(--ink)}
+.btn{font:inherit;font-weight:600;border:0;border-radius:999px;padding:9px 18px;cursor:pointer;background:var(--green);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.6;cursor:default}
+.err{color:var(--err);font-size:.88rem;min-height:1.2em;margin:0}
+.muted{color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.stat b{display:block;font-size:1.6rem;color:var(--navy);font-variant-numeric:tabular-nums}
+.stat span{font-size:.82rem;color:var(--muted)}
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-bottom:12px}
+.tools .f{flex:1;min-width:180px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.86rem;white-space:nowrap}
+th,td{padding:9px 12px;text-align:start;border-bottom:1px solid var(--line)}
+th{background:var(--surface-2);position:sticky;top:0;font-weight:600}
+td.ltr{direction:ltr;text-align:right}
+tr:last-child td{border-bottom:0}
+.note{font-size:.8rem;color:var(--muted);margin-top:10px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section id="loginView" class="card login">
+    <h1>لوحة الإدارة</h1>
+    <p class="muted" style="margin:0;font-size:.9rem">خاصة بإدارة عين اليقين فقط.</p>
+    <form id="loginForm" style="display:flex;flex-direction:column;gap:12px">
+      <div><label for="em">البريد الإلكتروني</label><input id="em" type="email" dir="ltr" autocomplete="username" required></div>
+      <div><label for="pw">كلمة المرور</label><input id="pw" type="password" dir="ltr" autocomplete="current-password" required></div>
+      <p class="err" id="loginErr" aria-live="polite"></p>
+      <button class="btn" type="submit">دخول</button>
+    </form>
+  </section>
+
+  <section id="dataView" hidden>
+    <header>
+      <h1>المسجلون في عباداتي</h1>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="csvBtn">تنزيل Excel (CSV)</button><button class="btn ghost" id="refreshBtn">تحديث</button><button class="btn ghost" id="outBtn">تسجيل الخروج</button></div>
+    </header>
+    <div class="stats" id="stats"></div>
+    <div class="tools">
+      <div class="f"><label for="q">بحث بالاسم أو البريد أو الموبايل</label><input id="q" type="search"></div>
+      <div class="f"><label for="fg">النوع</label><select id="fg"><option value="">الكل</option><option value="male">ذكر</option><option value="female">أنثى</option></select></div>
+      <div class="f"><label for="fn">الجنسية</label><select id="fn"><option value="">الكل</option></select></div>
+    </div>
+    <div class="tablewrap"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div>
+    <p class="note">تعرض هذه الصفحة بيانات التسجيل فقط. عبادات كل شخص خاصة به، ولا يمكن للإدارة الاطلاع عليها.</p>
+  </section>
+</div>
+<script>
+const SUPA={url:'https://yyvnoxhwojklujmzghep.supabase.co',key:'sb_publishable_5kX5Fb9bHLOqt5xZvymQfQ_U_Ypspi1'};
+const $=s=>document.querySelector(s);
+const AKEY='ainyaqeen-admin';
+let auth=null;try{auth=JSON.parse(sessionStorage.getItem(AKEY)||'null')}catch(e){}
+let rows=[];
+const COLS=[['name','الاسم'],['email','البريد الإلكتروني'],['phone','الموبايل'],['dob','تاريخ الميلاد'],['gender','النوع'],['nationality','الجنسية'],['governorate','المحافظة'],['with_ay','مسافر مع عين اليقين'],['relation','العلاقة بعين اليقين'],['created_at','تاريخ التسجيل'],['last_seen','آخر دخول']];
+const MAP={gender:{male:'ذكر',female:'أنثى'},with_ay:{yes:'نعم',no:'لا'},relation:{student:'طالبة',teacher:'معلمة',alumni:'خريجة',none:'لست طالبة ولا خريجة'}};
+const fmtDT=v=>v?new Date(v).toLocaleString('ar-EG',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
+const val=(r,k)=>{const v=r[k];if(v==null)return'';if(MAP[k])return MAP[k][v]||v;if(k==='created_at'||k==='last_seen')return fmtDT(v);return String(v);};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+async function login(email,password){
+  const r=await fetch(SUPA.url+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:SUPA.key,'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+  const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error('login');
+  auth={access:j.access_token,refresh:j.refresh_token,exp:Date.now()+(j.expires_in||3600)*1000};sessionStorage.setItem(AKEY,JSON.stringify(auth));}
+async function refreshAuth(){
+  const r=await fetch(SUPA.url+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:SUPA.key,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:auth.refresh})});
+  const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error('expired');
+  auth={access:j.access_token,refresh:j.refresh_token,exp:Date.now()+(j.expires_in||3600)*1000};sessionStorage.setItem(AKEY,JSON.stringify(auth));}
+async function load(){
+  if(auth.exp-Date.now()<60000)await refreshAuth();
+  const r=await fetch(SUPA.url+'/rest/v1/rpc/ay_admin_members',{method:'POST',headers:{apikey:SUPA.key,Authorization:'Bearer '+auth.access,'Content-Type':'application/json'},body:'{}'});
+  const j=await r.json().catch(()=>null);
+  if(!r.ok){const e=new Error((j&&j.message)||'fail');throw e;}
+  rows=j||[];}
+function filtered(){const q=$('#q').value.trim().toLowerCase(),g=$('#fg').value,n=$('#fn').value;
+  return rows.filter(r=>(!g||r.gender===g)&&(!n||r.nationality===n)&&(!q||[r.name,r.email,r.phone].some(x=>String(x||'').toLowerCase().includes(q))));}
+function render(){
+  const nats=[...new Set(rows.map(r=>r.nationality).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'ar'));
+  const cur=$('#fn').value;$('#fn').innerHTML='<option value="">الكل</option>'+nats.map(x=>`<option${x===cur?' selected':''}>${esc(x)}</option>`).join('');
+  const week=Date.now()-7*864e5;
+  const st=[['إجمالي المسجلين',rows.length],['ذكور',rows.filter(r=>r.gender==='male').length],['إناث',rows.filter(r=>r.gender==='female').length],['مسافرون مع عين اليقين',rows.filter(r=>r.with_ay==='yes').length],['سجلوا آخر ٧ أيام',rows.filter(r=>new Date(r.created_at)>week).length]];
+  $('#stats').innerHTML=st.map(([l,v])=>`<div class="card stat"><b>${v.toLocaleString('ar-EG')}</b><span>${l}</span></div>`).join('');
+  $('#th').innerHTML='<tr>'+COLS.map(c=>`<th>${c[1]}</th>`).join('')+'</tr>';
+  const f=filtered();
+  $('#tb').innerHTML=f.length?f.map(r=>'<tr>'+COLS.map(([k])=>`<td${k==='email'||k==='phone'?' class="ltr"':''}>${esc(val(r,k))}</td>`).join('')+'</tr>').join(''):`<tr><td colspan="${COLS.length}" class="muted">لا توجد بيانات</td></tr>`;}
+function csv(){
+  const f=filtered();const q=s=>'"'+String(s).replace(/"/g,'""')+'"';
+  const lines=[COLS.map(c=>q(c[1])).join(',')].concat(f.map(r=>COLS.map(([k])=>q(k==='phone'&&r.phone?'\t'+r.phone:(k==='created_at'||k==='last_seen')?(r[k]?new Date(r[k]).toISOString().slice(0,16).replace('T',' '):''):val(r,k))).join(',')));
+  const blob=new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ain-alyaqeen-members-'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);}
+async function show(){
+  try{await load();$('#loginView').hidden=true;$('#dataView').hidden=false;render();}
+  catch(e){sessionStorage.removeItem(AKEY);auth=null;$('#dataView').hidden=true;$('#loginView').hidden=false;
+    $('#loginErr').textContent=e.message==='not_admin'?'هذا الحساب ليس له صلاحية الإدارة.':'انتهت الجلسة، سجّل الدخول مرة أخرى.';}}
+$('#loginForm').onsubmit=async e=>{e.preventDefault();const b=e.target.querySelector('button');b.disabled=true;$('#loginErr').textContent='';
+  try{await login($('#em').value.trim().toLowerCase(),$('#pw').value);await show();}catch(err){$('#loginErr').textContent='البريد أو كلمة المرور غير صحيحة.';}finally{b.disabled=false;}};
+$('#q').oninput=render;$('#fg').onchange=render;$('#fn').onchange=render;
+$('#csvBtn').onclick=csv;$('#refreshBtn').onclick=show;
+$('#outBtn').onclick=()=>{sessionStorage.removeItem(AKEY);auth=null;rows=[];$('#dataView').hidden=true;$('#loginView').hidden=false;$('#pw').value='';};
+if(auth)show();
+</script>
+</body>
+</html>
