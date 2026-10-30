@@ -339,6 +339,7 @@ figure.ph figcaption{font-size:.7rem;color:var(--muted);text-align:center}
 .pgroups{display:flex;flex-direction:column;gap:18px;min-width:0}.pgroup h4{font-family:var(--f-display);color:var(--green);font-size:1.02rem;margin:0 0 8px;display:flex;align-items:center;gap:10px}.pgroup h4::after{content:"";flex:1;height:1px;background:var(--line)}
 .entities .ent h3,.prog aside h3{font-family:"Aref Ruqaa","Amiri",serif;font-weight:700;line-height:1.5}.h-hero h1{font-family:"Cairo","Readex Pro",sans-serif;font-weight:800;font-size:clamp(2.6rem,7vw,4.2rem)!important;line-height:1.25;white-space:nowrap}.entities .ent h3{font-size:1.65rem}.prog aside h3{font-size:1.55rem!important}
 .ihint{background:rgba(196,154,58,.11);border-inline-start:3px solid var(--gold);border-radius:10px;padding:10px 14px;font-size:.92rem;line-height:1.8;margin-block:8px}
+.cb{position:relative}.cbList{position:absolute;inset-inline:0;top:100%;z-index:30;margin:4px 0 0;padding:4px;list-style:none;max-height:240px;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 24px rgba(13,31,51,.14)}.cbList li{padding:8px 12px;border-radius:8px;cursor:pointer}.cbList li[role]:hover,.cbList li.on{background:var(--green-soft)}.cbList li.none{color:var(--muted);cursor:default}
 .book{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:linear-gradient(135deg,var(--green-soft),var(--surface));border:1.5px solid var(--gold);border-radius:18px;padding:14px 16px;margin-block:4px}
 .book-t{display:flex;flex-direction:column;gap:2px}
 .book-t b{font-family:var(--f-display);color:var(--navy);font-size:1.05rem}
@@ -1038,6 +1039,8 @@ footer p{font-size:.85rem;color:var(--muted)}
       <div class="field"><label for="rgPhone">رقم الموبايل</label><input type="tel" id="rgPhone" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="01xxxxxxxxx" required></div>
       <div class="field"><label for="rgDob">تاريخ الميلاد</label><input type="date" id="rgDob" required></div>
     </div>
+    <div class="field cb" id="cbNat"><label for="rgNat">الجنسية</label><input type="text" id="rgNat" autocomplete="off" placeholder="ابحث عن الدولة…" required><ul class="cbList" role="listbox" hidden></ul></div>
+    <div class="field cb" id="cbGov" hidden><label for="rgGov">المحافظة</label><input type="text" id="rgGov" autocomplete="off" placeholder="ابحث عن المحافظة…"><ul class="cbList" role="listbox" hidden></ul></div>
     <div class="field"><label>النوع</label><div class="ttype rgGender"><button type="button" data-v="male" aria-pressed="false">ذكر</button><button type="button" data-v="female" aria-pressed="false">أنثى</button></div></div>
     <div class="field"><label>هل أنت مسافر للعمرة / الحج مع عين اليقين؟</label><div class="ttype rgWith"><button type="button" data-v="yes" aria-pressed="false">نعم</button><button type="button" data-v="no" aria-pressed="false">لا</button></div></div>
     <div class="femaleOnly stack" hidden>
@@ -1579,10 +1582,22 @@ function wireSignin(slot,v){const f=slot.querySelector('.signinForm'),em=f.query
   if(Store.mode==='local'){const r=readAcct(x);if(!r||!r.prof||!r.prof.reg)return err.textContent='لا يوجد حساب بهذا البريد. أنشئ حسابًا جديدًا.';setSess(x);loadLocal();}
   else{if(!Store.prof.reg||normEmail(Store.prof.reg.email)!==x)return err.textContent='لا يوجد حساب بهذا البريد. أنشئ حسابًا جديدًا.';setSess(x);}
   v.dataset.auth='';refreshPriv(true);};}
+const COUNTRIES=["مصر", "إثيوبيا", "أذربيجان", "الأرجنتين", "الأردن", "أرمينيا", "إريتريا", "إسبانيا", "أستراليا", "إستونيا", "إسواتيني", "أفغانستان", "الإكوادور", "ألبانيا", "ألمانيا", "الإمارات", "أنتيغوا وباربودا", "أندورا", "إندونيسيا", "أنغولا", "الأوروغواي", "أوزبكستان", "أوغندا", "أوكرانيا", "إيران", "أيرلندا", "آيسلندا", "إيطاليا", "بابوا غينيا الجديدة", "باراغواي", "باربادوس", "باكستان", "بالاو", "البحرين", "البرازيل", "البرتغال", "بروناي", "بلجيكا", "بلغاريا", "بليز", "بنغلاديش", "بنما", "بنين", "بوتان", "بوتسوانا", "بوركينا فاسو", "بوروندي", "البوسنة والهرسك", "بولندا", "بوليفيا", "بيرو", "بيلاروسيا", "تايلاند", "تايوان", "تركمانستان", "تركيا", "ترينيداد وتوباغو", "تشاد", "التشيك", "تشيلي", "تنزانيا", "توغو", "توفالو", "تونس", "تونغا", "تيمور الشرقية", "جامايكا", "الجبل الأسود", "الجزائر", "جزر البهاما", "جزر القمر", "جزر المالديف", "جزر سليمان", "جزر مارشال", "جمهورية أفريقيا الوسطى", "جمهورية الدومينيكان", "جنوب أفريقيا", "جنوب السودان", "جورجيا", "جيبوتي", "الدنمارك", "دومينيكا", "رواندا", "روسيا", "رومانيا", "زامبيا", "زيمبابوي", "ساحل العاج", "ساموا", "سان مارينو", "سانت فنسنت والغرينادين", "سانت كيتس ونيفيس", "سانت لوسيا", "ساو تومي وبرينسيب", "سريلانكا", "السعودية", "السلفادور", "سلوفاكيا", "سلوفينيا", "سنغافورة", "السنغال", "السودان", "سوريا", "سورينام", "السويد", "سويسرا", "سيراليون", "سيشل", "صربيا", "الصومال", "الصين", "طاجيكستان", "العراق", "عُمان", "الغابون", "غامبيا", "غانا", "غرينادا", "غواتيمالا", "غيانا", "غينيا", "غينيا الاستوائية", "غينيا بيساو", "الفاتيكان", "فانواتو", "فرنسا", "الفلبين", "فلسطين", "فنزويلا", "فنلندا", "فيتنام", "فيجي", "قبرص", "قطر", "قيرغيزستان", "كابو فيردي", "كازاخستان", "الكاميرون", "كرواتيا", "كمبوديا", "كندا", "كوبا", "كوريا الجنوبية", "كوريا الشمالية", "كوستاريكا", "كوسوفو", "كولومبيا", "الكونغو", "الكونغو الديمقراطية", "الكويت", "كيريباتي", "كينيا", "لاتفيا", "لاوس", "لبنان", "لوكسمبورغ", "ليبيا", "ليبيريا", "ليتوانيا", "ليختنشتاين", "ليسوتو", "مالاوي", "مالطا", "مالي", "ماليزيا", "المجر", "مدغشقر", "المغرب", "مقدونيا الشمالية", "المكسيك", "المملكة المتحدة", "منغوليا", "موريتانيا", "موريشيوس", "موزمبيق", "مولدوفا", "موناكو", "ميانمار", "ميكرونيزيا", "ناميبيا", "ناورو", "النرويج", "النمسا", "نيبال", "النيجر", "نيجيريا", "نيكاراغوا", "نيوزيلندا", "هايتي", "الهند", "هندوراس", "هولندا", "الولايات المتحدة", "اليابان", "اليمن", "اليونان"];const GOVS=["القاهرة", "الجيزة", "الإسكندرية", "القليوبية", "الدقهلية", "الشرقية", "الغربية", "المنوفية", "البحيرة", "كفر الشيخ", "دمياط", "بورسعيد", "الإسماعيلية", "السويس", "الفيوم", "بني سويف", "المنيا", "أسيوط", "سوهاج", "قنا", "الأقصر", "أسوان", "البحر الأحمر", "الوادي الجديد", "مطروح", "شمال سيناء", "جنوب سيناء"];
+const normAr=s=>(s||'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/[\u064B-\u0652]/g,'').trim();
+function combo(wrap,list,onPick){const inp=wrap.querySelector('input'),ul=wrap.querySelector('.cbList');let cur=-1;
+ const render=()=>{const q=normAr(inp.value);const m=list.filter(x=>!q||normAr(x).includes(q)).slice(0,60);cur=-1;ul.innerHTML=m.length?m.map(x=>`<li role="option">${x}</li>`).join(''):'<li class="none">لا توجد نتائج</li>';ul.hidden=false;};
+ const pick=v=>{inp.value=v;ul.hidden=true;onPick&&onPick(v);};
+ inp.addEventListener('focus',render);inp.addEventListener('input',()=>{render();onPick&&onPick(list.includes(inp.value.trim())?inp.value.trim():'');});
+ ul.addEventListener('mousedown',e=>{const li=e.target.closest('li[role]');if(li){e.preventDefault();pick(li.textContent);}});
+ inp.addEventListener('keydown',e=>{const it=[...ul.querySelectorAll('li[role]')];if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();cur=Math.max(0,Math.min(it.length-1,cur+(e.key==='ArrowDown'?1:-1)));it.forEach((l,i)=>l.classList.toggle('on',i===cur));it[cur]&&it[cur].scrollIntoView({block:'nearest'});}else if(e.key==='Enter'&&!ul.hidden&&it.length){e.preventDefault();pick((it[cur]||it[0]).textContent);}else if(e.key==='Escape')ul.hidden=true;});
+ inp.addEventListener('blur',()=>setTimeout(()=>{ul.hidden=true;},150));}
 function wireReg(slot,v,signup){const R=Object.assign({},signup?{}:(Store.prof.reg||{}));const f=slot.querySelector('.regForm');const em=f.querySelector('#rgEmail');em.value=R.email||'';
  if(signup){f.querySelector('.haveAcct').hidden=false;}else{f.querySelector('.rgTitle').textContent='تعديل بياناتي';em.readOnly=true;}
  const nm=f.querySelector('#rgName'),ph=f.querySelector('#rgPhone'),db=f.querySelector('#rgDob'),rel=f.querySelector('#rgRel');
  nm.value=R.name||(Store.me&&Store.me.name)||'';ph.value=R.phone||'';db.value=R.dob||'';rel.value=R.relation||'';db.max=todayISO();
+ const nat=f.querySelector('#rgNat'),gov=f.querySelector('#rgGov'),govW=f.querySelector('#cbGov');nat.value=R.nationality||'';gov.value=R.governorate||'';
+ const showGov=v=>{govW.hidden=v!=='مصر';if(govW.hidden)gov.value='';};showGov(nat.value);
+ combo(f.querySelector('#cbNat'),COUNTRIES,showGov);combo(govW,GOVS);
  const fem=f.querySelector('.femaleOnly');
  const paint=()=>{f.querySelectorAll('.rgGender button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===R.gender));f.querySelectorAll('.rgWith button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===R.withAY));fem.hidden=R.gender!=='female';};paint();
  f.querySelectorAll('.rgGender button').forEach(b=>b.onclick=()=>{R.gender=b.dataset.v;paint();});
@@ -1594,10 +1609,12 @@ function wireReg(slot,v,signup){const R=Object.assign({},signup?{}:(Store.prof.r
   if(nm.value.trim().length<3)return err.textContent='اكتب الاسم بالكامل.',nm.focus();
   if(phone.replace(/\D/g,'').length<8)return err.textContent='اكتب رقم موبايل صحيح.',ph.focus();
   if(!db.value)return err.textContent='اختر تاريخ الميلاد من التقويم.',db.focus();
+  if(!COUNTRIES.includes(nat.value.trim()))return err.textContent='اختر الجنسية من القائمة.',nat.focus();
+  if(nat.value.trim()==='مصر'&&!GOVS.includes(gov.value.trim()))return err.textContent='اختر المحافظة من القائمة.',gov.focus();
   if(!R.gender)return err.textContent='اختر النوع.';
   if(!R.withAY)return err.textContent='اختر هل أنت مسافر مع عين اليقين.';
   if(R.gender==='female'&&!rel.value)return err.textContent='اختاري علاقتك بعين اليقين.',rel.focus();
-  const reg={email:mail,name:nm.value.trim(),phone,dob:db.value,gender:R.gender,withAY:R.withAY||'',relation:R.gender==='female'?rel.value:'',at:(Store.prof.reg&&Store.prof.reg.at)||new Date().toISOString(),updated:new Date().toISOString()};
+  const reg={email:mail,name:nm.value.trim(),phone,dob:db.value,gender:R.gender,nationality:nat.value.trim(),governorate:nat.value.trim()==='مصر'?gov.value.trim():'',withAY:R.withAY||'',relation:R.gender==='female'?rel.value:'',at:(Store.prof.reg&&Store.prof.reg.at)||new Date().toISOString(),updated:new Date().toISOString()};
   if(signup){setSess(mail);if(Store.mode==='local'){Store.prof={};Store.days={};}}Store.prof.reg=reg;v.dataset.reg='';v.dataset.auth='';queueWrite('prof');saveRegShared(reg);refreshPriv(true);};}
 async function saveRegShared(reg){if(Store.mode!=='cloud'||!regRef)return;try{await regRef.set(Object.assign({},reg));}catch(e){}}
 function wireSetup(slot,v){const isNew=v.dataset.editing==='new'||!trip();const t=isNew?{type:'umrah',start:todayISO(),days:10}:trip();let type=t.type;
