@@ -510,9 +510,9 @@ textarea{min-height:76px;resize:vertical;line-height:1.7}
 .tip h3{display:flex;gap:10px;align-items:center;font-size:1.1rem}
 .tip h3 svg{width:26px;height:26px;color:var(--green);flex:0 0 26px}
 .tip ul{margin:0;padding-inline-start:20px;display:flex;flex-direction:column;gap:4px;font-size:.93rem}
-.packing{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-@media (max-width:680px){.packing{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:420px){.packing{grid-template-columns:1fr}}
+.packing{display:flex;flex-direction:column;gap:16px}.pkgroup h4{display:flex;align-items:center;gap:8px;font-family:var(--f-display);color:var(--navy);font-size:1.05rem;margin:0 0 8px}.pkgroup h4 svg{width:18px;height:18px;color:var(--pc)}.pklist{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.pklist .check input{accent-color:var(--pc)}
+
+@media (max-width:420px){.pklist{grid-template-columns:1fr}}
 .credits{font-size:.72rem;color:var(--muted);line-height:1.6}
 .credits a{color:var(--muted)}
 
@@ -1474,9 +1474,9 @@ const TIPS=[
  ['dome','في المدينة المنورة',['احجز موعد الصلاة في الروضة الشريفة مسبقًا من تطبيق نُسُك','زيارة المسجد النبوي سنة مستقلة، وليست من مناسك الحج أو العمرة','يمكن زيارة مسجد قباء وجبل أحد والبقيع','قطار الحرمين أسهل وأسرع وسيلة للتنقل بين مكة والمدينة']]
 ];
 $('#tips').innerHTML=TIPS.map(([k,h,l])=>`<article class="tip"><h3>${ti(k)}${h}</h3><ul>${l.map(x=>`<li>${x}</li>`).join('')}</ul></article>`).join('');
-const PACK=['جواز السفر وصورة منه','التأشيرة والتصاريح','تذاكر الطيران','كارت الفندق','ملابس إحرام (قطعتان على الأقل)','حزام للإحرام','شبشب مريح وحذاء للمشي','شنطة صغيرة للأحذية','مظلة شمسية','واقي شمس بدون رائحة','صابون ومزيل عرق بدون رائحة','الأدوية الشخصية بالروشتة','فازلين لمنع الاحتكاك','شاحن متنقل','مصحف صغير','سجادة صلاة خفيفة','زجاجة مياه','كمامات','مقص صغير للتقصير','ريالات سعودية فئات صغيرة','شريحة اتصال أو باقة تجوال','قائمة أدعيتك الخاصة'];
-function renderPack(){const n=PACK.filter((_,i)=>S.pack[i]).length;$('#packScore').textContent=AR(n)+' / '+AR(PACK.length);
- $('#packing').innerHTML=PACK.map((p,i)=>`<label class="check${S.pack[i]?' done':''}"><input type="checkbox" id="pk-${i}" data-p="${i}" ${S.pack[i]?'checked':''}>${p}</label>`).join('');}
+const PACKG=[["الملابس", "#1d3a5c", ["ملابس الإحرام (للرجال)", "عبايات وطُرَح ودبابيس (للسيدات)", "ملابس قطنية مريحة وشرابات", "بيجامات وملابس داخلية", "شبشب وحذاء مريح للمشي", "جاكيت خفيف لليل والفجر"]], ["أدوات العناية", "#2f9a46", ["فرشة ومعجون أسنان ومشط", "شامبو وشاور جيل ومزيل عرق", "مسحوق غسيل وواقي شمس", "شبشب حمام وليفة"]], ["حقيبة اليد", "#b5852a", ["جواز السفر وتذاكر الطيران", "الـ QR code", "نقود مصرية وريالات", "أقلام ونوت بوك صغيرة وسبحة"]], ["أغراض أخرى", "#1d3a5c", ["شاحن وباور بانك وفيشة (ثنائي/ثلاثي)", "مقص صغير للتحلل وقصّافة", "زجاجة فارغة لماء زمزم", "سجادة صلاة صغيرة وعداد أشواط", "مناديل ومناديل مبللة وأكياس", "نظارة وقفل للشنط"]], ["الأدوية", "#8e1d5c", ["أدوية البرد والكحة والحلق", "مضاد حيوي (لا يُصرف إلا بروشتة)", "أدوية المغص والإسهال والصداع", "ترمومتر"]]];const PACK=PACKG.flatMap(g=>g[2]);
+function renderPack(){const k=i=>'v2_'+i;const n=PACK.filter((_,i)=>S.pack[k(i)]).length;$('#packScore').textContent=AR(n)+' / '+AR(PACK.length);let i=0;
+ $('#packing').innerHTML=PACKG.map(([t,c,items])=>`<div class="pkgroup"><h4 style="--pc:${c}"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1l2.6 4.7L19.8 4l-1.7 5.2L23 12l-4.9 2.8 1.7 5.2-5.2-1.7L12 23l-2.6-4.7L4.2 20l1.7-5.2L1 12l4.9-2.8L4.2 4l5.2 1.7z"/></svg>${t}</h4><div class="pklist">${items.map(p=>{const j=i++;return `<label class="check${S.pack[k(j)]?' done':''}" style="--pc:${c}"><input type="checkbox" id="pk-${j}" data-p="${k(j)}" ${S.pack[k(j)]?'checked':''}>${p}</label>`;}).join('')}</div></div>`).join('');}
 $('#packing').onchange=e=>{S.pack[e.target.dataset.p]=e.target.checked;save();renderPack();};
 renderPack();
 
