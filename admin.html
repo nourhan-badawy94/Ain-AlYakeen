@@ -71,7 +71,7 @@ tr:last-child td{border-bottom:0}
       <div class="f"><label for="fn">الجنسية</label><select id="fn"><option value="">الكل</option></select></div>
     </div>
     <div class="tablewrap"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div>
-    <p class="note">تعرض هذه الصفحة بيانات التسجيل فقط. عبادات كل شخص خاصة به، ولا يمكن للإدارة الاطلاع عليها.</p>
+    <p class="note">تعرض هذه الصفحة بيانات التسجيل وعدد أيام النشاط فقط. محتوى عبادات كل شخص خاص به، ولا يمكن للإدارة الاطلاع عليه.</p>
   </section>
 </div>
 <script>
@@ -80,10 +80,11 @@ const $=s=>document.querySelector(s);
 const AKEY='ainyaqeen-admin';
 let auth=null;try{auth=JSON.parse(sessionStorage.getItem(AKEY)||'null')}catch(e){}
 let rows=[];
-const COLS=[['name','الاسم'],['email','البريد الإلكتروني'],['phone','الموبايل'],['dob','تاريخ الميلاد'],['gender','النوع'],['nationality','الجنسية'],['governorate','المحافظة'],['with_ay','مسافر مع عين اليقين'],['relation','العلاقة بعين اليقين'],['created_at','تاريخ التسجيل'],['last_seen','آخر دخول']];
+const COLS=[['name','الاسم'],['email','البريد الإلكتروني'],['phone','الموبايل'],['dob','تاريخ الميلاد'],['age','السن'],['gender','النوع'],['nationality','الجنسية'],['governorate','المحافظة'],['with_ay','مسافر مع عين اليقين'],['relation','العلاقة بعين اليقين'],['created_at','تاريخ التسجيل'],['last_seen','آخر دخول'],['active_days','عدد أيام النشاط'],['last_activity','آخر نشاط']];
 const MAP={gender:{male:'ذكر',female:'أنثى'},with_ay:{yes:'نعم',no:'لا'},relation:{student:'طالبة',teacher:'معلمة',alumni:'خريجة',none:'لم أدرس في عين اليقين من قبل'}};
 const fmtDT=v=>v?new Date(v).toLocaleString('ar-EG',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
-const val=(r,k)=>{const v=r[k];if(v==null)return'';if(MAP[k])return MAP[k][v]||v;if(k==='created_at'||k==='last_seen')return fmtDT(v);return String(v);};
+const ageOf=d=>{if(!d)return'';const b=new Date(d),n=new Date();let a=n.getFullYear()-b.getFullYear();if(n.getMonth()<b.getMonth()||(n.getMonth()===b.getMonth()&&n.getDate()<b.getDate()))a--;return a;};
+const val=(r,k)=>{if(k==='age')return String(ageOf(r.dob));if(k==='last_activity')return r[k]?new Date(r[k]).toLocaleDateString('ar-EG'):'';const v=r[k];if(v==null)return'';if(MAP[k])return MAP[k][v]||v;if(k==='created_at'||k==='last_seen')return fmtDT(v);return String(v);};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 async function login(email,password){
@@ -113,7 +114,7 @@ function render(){
   $('#tb').innerHTML=f.length?f.map(r=>'<tr>'+COLS.map(([k])=>`<td${k==='email'||k==='phone'?' class="ltr"':''}>${esc(val(r,k))}</td>`).join('')+'</tr>').join(''):`<tr><td colspan="${COLS.length}" class="muted">لا توجد بيانات</td></tr>`;}
 function csv(){
   const f=filtered();const q=s=>'"'+String(s).replace(/"/g,'""')+'"';
-  const lines=[COLS.map(c=>q(c[1])).join(',')].concat(f.map(r=>COLS.map(([k])=>q(k==='phone'&&r.phone?'\t'+r.phone:(k==='created_at'||k==='last_seen')?(r[k]?new Date(r[k]).toISOString().slice(0,16).replace('T',' '):''):val(r,k))).join(',')));
+  const lines=[COLS.map(c=>q(c[1])).join(',')].concat(f.map(r=>COLS.map(([k])=>q(k==='phone'&&r.phone?'\t'+r.phone:(k==='created_at'||k==='last_seen'||k==='last_activity')?(r[k]?new Date(r[k]).toISOString().slice(0,16).replace('T',' '):''):val(r,k))).join(',')));
   const blob=new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ain-alyaqeen-members-'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);}
 async function show(){

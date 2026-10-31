@@ -153,7 +153,9 @@ begin
       'email', mb.email, 'name', mb.name, 'phone', mb.phone, 'dob', mb.dob,
       'gender', mb.gender, 'nationality', mb.nationality, 'governorate', mb.governorate,
       'with_ay', mb.with_ay, 'relation', mb.relation, 'created_at', mb.created_at,
-      'last_seen', (select max(last_seen) from sessions s where s.member_id = mb.id))
+      'last_seen', (select max(last_seen) from sessions s where s.member_id = mb.id),
+      'active_days', (select count(*) from days d where d.member_id = mb.id),
+      'last_activity', (select max(updated_at) from days d where d.member_id = mb.id))
     from members mb order by mb.created_at desc;
 end $$;
 

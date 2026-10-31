@@ -340,6 +340,9 @@ figure.ph figcaption{font-size:.7rem;color:var(--muted);text-align:center}
 .entities .ent h3,.prog aside h3{font-family:"Aref Ruqaa","Amiri",serif;font-weight:700;line-height:1.5}.h-hero h1{font-family:"Cairo","Readex Pro",sans-serif;font-weight:800;font-size:clamp(2.6rem,7vw,4.2rem)!important;line-height:1.25;white-space:nowrap}.entities .ent h3{font-size:1.65rem}.prog aside h3{font-size:1.55rem!important}
 .ihint{background:rgba(196,154,58,.11);border-inline-start:3px solid var(--gold);border-radius:10px;padding:10px 14px;font-size:.92rem;line-height:1.8;margin-block:8px}
 .cb{position:relative}.cbList{position:absolute;inset-inline:0;top:100%;z-index:30;margin:4px 0 0;padding:4px;list-style:none;max-height:240px;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 24px rgba(13,31,51,.14)}.cbList li{padding:8px 12px;border-radius:8px;cursor:pointer}.cbList li[role]:hover,.cbList li.on{background:var(--green-soft)}.cbList li.none{color:var(--muted);cursor:default}
+.privline{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted);margin:-6px 0 10px}.privline svg{width:14px;height:14px;flex:0 0 14px;color:var(--green)}
+.dob{display:grid;grid-template-columns:1fr 1.4fr 1.2fr;gap:6px}
+.privnote{display:flex;gap:10px;align-items:flex-start;background:var(--green-soft);border-radius:12px;padding:10px 12px;font-size:.86rem;line-height:1.8;text-align:start}.privnote svg{flex:0 0 18px;width:18px;height:18px;margin-top:4px;color:var(--green)}
 .book{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:linear-gradient(135deg,var(--green-soft),var(--surface));border:1.5px solid var(--gold);border-radius:18px;padding:14px 16px;margin-block:4px}
 .book-t{display:flex;flex-direction:column;gap:2px}
 .book-t b{font-family:var(--f-display);color:var(--navy);font-size:1.05rem}
@@ -1025,6 +1028,7 @@ footer p{font-size:.85rem;color:var(--muted)}
   <div class="card stack ibad-intro" style="gap:10px;margin-bottom:16px;text-align:center">
     <p class="sacred" style="font-size:1.35rem">﴿وَتَزَوَّدُوا فَإِنَّ خَيْرَ الزَّادِ التَّقْوَىٰ﴾</p>
     <p style="font-size:.95rem;line-height:1.9">أيامك في الحرم معدودة، وكل لحظة فيها غنيمة. «عباداتي» تساعدك أن تجعل كل يوم أفضل من الذي قبله: تتابع صلواتك على وقتها وفي جماعة، وتكمل ختمتك، وتحافظ على أذكارك، وتدوّن دعواتك الخاصة حتى لا تنسى أحدًا. سجّل الآن وابدأ رحلتك بنية واضحة.</p>
+    <div class="privnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg><span><b>عباداتك سرٌّ بينك وبين الله.</b> كل ما تسجّله هنا من صلاة وقرآن وأذكار ودعاء محفوظ في حسابك وحدك، ولا يطّلع عليه أحد، حتى فريق عين اليقين.</span></div>
   </div>
   <form class="card setup signinForm" novalidate>
     <h3>تسجيل الدخول</h3>
@@ -1043,12 +1047,12 @@ footer p{font-size:.85rem;color:var(--muted)}
 <template id="tplReg">
   <form class="card setup regForm" novalidate>
     <h3 class="rgTitle">إنشاء حساب جديد</h3>
-    <p class="muted" style="font-size:.88rem">بياناتك محفوظة في حسابك، ولا يطّلع عليها إلا إدارة عين اليقين.</p>
+    <p class="muted" style="font-size:.88rem">بيانات التسجيل يطّلع عليها فريق عين اليقين للتواصل معك. أما عباداتك فخاصة بك وحدك، ولا يطّلع عليها أحد.</p>
     <div class="field"><label for="rgEmail">البريد الإلكتروني</label><input type="email" id="rgEmail" autocomplete="email" inputmode="email" dir="ltr" placeholder="name@example.com" required></div>
     <div class="field"><label for="rgName">الاسم بالكامل</label><input type="text" id="rgName" autocomplete="name" required></div>
     <div class="two">
       <div class="field"><label for="rgPhone">رقم الموبايل</label><input type="tel" id="rgPhone" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="01xxxxxxxxx" required></div>
-      <div class="field"><label for="rgDob">تاريخ الميلاد</label><input type="date" id="rgDob" required></div>
+      <div class="field"><label for="dobD">تاريخ الميلاد</label><div class="dob"><select id="dobD" aria-label="اليوم"><option value="">اليوم</option></select><select id="dobM" aria-label="الشهر"><option value="">الشهر</option></select><select id="dobY" aria-label="السنة"><option value="">السنة</option></select></div><input type="hidden" id="rgDob"></div>
     </div>
     <div class="field cb" id="cbNat"><label for="rgNat">الجنسية</label><input type="text" id="rgNat" autocomplete="off" placeholder="ابحث عن الدولة…" required><ul class="cbList" role="listbox" hidden></ul></div>
     <div class="field cb" id="cbGov" hidden><label for="rgGov">المحافظة</label><input type="text" id="rgGov" autocomplete="off" placeholder="ابحث عن المحافظة…"><ul class="cbList" role="listbox" hidden></ul></div>
@@ -1572,7 +1576,7 @@ document.addEventListener('change',e=>{if(e.target.id==='tripSel'){Store.prof.ac
 
 const lockSvg='<svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>';
 function acctBar(){const R=Store.prof.reg||{};const n=R.name||(Store.me&&Store.me.name)||'حسابك';
- if(Store.mode==='supa')return `<div class="acct"><span class="who"><span></span></span><span style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><span class="pill syncState">محفوظ في حسابك</span><button class="pill signOut" style="border:0;cursor:pointer">تسجيل الخروج</button></span></div>`;
+ if(Store.mode==='supa')return `<div class="acct"><span class="who"><span></span></span><span style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><span class="pill syncState">محفوظ في حسابك</span><button class="pill signOut" style="border:0;cursor:pointer">تسجيل الخروج</button></span></div><p class="privline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>عباداتك خاصة بك وحدك، ولا يطّلع عليها أحد، حتى فريق عين اليقين.</p>`;
  if(Store.mode==='cloud'){const av=Store.me&&Store.me.avatarUrl?`<img src="${Store.me.avatarUrl}" alt="">`:'';return `<div class="acct"><span class="who">${av}<span></span></span><span style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><button class="pill editReg" style="border:0;cursor:pointer">تعديل بياناتي</button><span class="pill syncState">محفوظ في حسابك</span><button class="pill signOut" style="border:0;cursor:pointer">تسجيل الخروج</button></span></div>`;}
  if(Store.mode==='local')return `<div class="acct"><span class="who"><span></span></span><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="pill editReg" style="border:0;cursor:pointer">تعديل بياناتي</button><button class="pill signOut" style="border:0;cursor:pointer">تسجيل الخروج</button></span></div>`;return'';}
 function fillName(slot){const w=slot.querySelector('.who span:last-child');if(!w)return;const R=Store.prof.reg||{};w.textContent=Store.mode==='local'?((R.name?R.name+' · ':'')+(Store.note||'بياناتك محفوظة على هذا الجهاز فقط')):(R.name||(Store.me&&Store.me.name)||'حسابك');}
@@ -1622,7 +1626,7 @@ function combo(wrap,list,onPick){const inp=wrap.querySelector('input'),ul=wrap.q
 function wireReg(slot,v,signup){const R=Object.assign({},signup?{}:(Store.prof.reg||{}));const f=slot.querySelector('.regForm');const em=f.querySelector('#rgEmail');em.value=R.email||'';
  if(signup){f.querySelector('.haveAcct').hidden=false;}else{f.querySelector('.rgTitle').textContent='تعديل بياناتي';em.readOnly=true;}
  const nm=f.querySelector('#rgName'),ph=f.querySelector('#rgPhone'),db=f.querySelector('#rgDob'),rel=f.querySelector('#rgRel');
- nm.value=R.name||(Store.me&&Store.me.name)||'';ph.value=R.phone||'';db.value=R.dob||'';rel.value=R.relation||'';db.max=todayISO();
+ nm.value=R.name||(Store.me&&Store.me.name)||'';ph.value=R.phone||'';db.value=R.dob||'';rel.value=R.relation||'';{const dD=f.querySelector('#dobD'),dM=f.querySelector('#dobM'),dY=f.querySelector('#dobY');const MN=["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];const yNow=new Date().getFullYear();dD.innerHTML+=Array.from({length:31},(_,i)=>`<option value="${String(i+1).padStart(2,'0')}">${AR(i+1)}</option>`).join('');dM.innerHTML+=MN.map((m,i)=>`<option value="${String(i+1).padStart(2,'0')}">${m}</option>`).join('');dY.innerHTML+=Array.from({length:yNow-1920-4},(_,i)=>yNow-5-i).map(y=>`<option value="${y}">${AR(y).replace(/٬/g,'')}</option>`).join('');if(db.value){const[y,m,d]=db.value.split('-');dY.value=y;dM.value=m;dD.value=d;}const sync=()=>{const y=dY.value,m=dM.value,d=dD.value;if(y&&m&&d){const dt=new Date(+y,+m-1,+d);db.value=(dt.getMonth()===+m-1)?`${y}-${m}-${d}`:'';}else db.value='';};[dD,dM,dY].forEach(x=>x.onchange=sync);}
  const nat=f.querySelector('#rgNat'),gov=f.querySelector('#rgGov'),govW=f.querySelector('#cbGov');nat.value=R.nationality||'';gov.value=R.governorate||'';
  const showGov=v=>{govW.hidden=v!=='مصر';if(govW.hidden)gov.value='';};showGov(nat.value);
  combo(f.querySelector('#cbNat'),COUNTRIES,showGov);combo(govW,GOVS);
@@ -1636,7 +1640,7 @@ function wireReg(slot,v,signup){const R=Object.assign({},signup?{}:(Store.prof.r
   if(signup&&Store.mode==='local'){const ex=readAcct(mail);if(ex&&ex.prof&&ex.prof.reg)return err.textContent='يوجد حساب بهذا البريد بالفعل، سجّل الدخول.';}
   if(nm.value.trim().length<3)return err.textContent='اكتب الاسم بالكامل.',nm.focus();
   if(phone.replace(/\D/g,'').length<8)return err.textContent='اكتب رقم موبايل صحيح.',ph.focus();
-  if(!db.value)return err.textContent='اختر تاريخ الميلاد من التقويم.',db.focus();
+  if(!db.value)return err.textContent='اختر تاريخ الميلاد كاملًا (اليوم والشهر والسنة) بشكل صحيح.',f.querySelector('#dobD').focus();
   if(!COUNTRIES.includes(nat.value.trim()))return err.textContent='اختر الجنسية من القائمة.',nat.focus();
   if(nat.value.trim()==='مصر'&&!GOVS.includes(gov.value.trim()))return err.textContent='اختر المحافظة من القائمة.',gov.focus();
   if(!R.gender)return err.textContent='اختر النوع.';
