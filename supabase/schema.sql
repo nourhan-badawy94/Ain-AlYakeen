@@ -174,3 +174,76 @@ returns boolean language sql stable security definer set search_path = public as
 $$;
 revoke all on function public.ay_is_admin(text) from public;
 grant execute on function public.ay_is_admin(text) to anon, authenticated;
+-- ===== Sign in by phone; email optional =====
+alter table public.members alter column email drop not null;
+alter table public.members add column if not exists phone_norm text;
+
+create or replace function public._norm_phone(t text)
+returns text language plpgsql immutable as $$
+declare d text := translate(coalesce(t,''), '٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹', '01234567890123456789');
+begin
+  d := regexp_replace(d, '\D', '', 'g');
+  if d like '00%' then d := substr(d, 3); end if;
+  if d like '20%' and length(d) = 12 then d := '0' || substr(d, 3); end if;
+  if d like '1%' and length(d) = 10 then d := '0' || d; end if;
+  return nullif(d, '');
+end $$;
+revoke all on function public._norm_phone(text) from public, anon, authenticated;
+
+update public.members set phone_norm = public._norm_phone(phone) where phone_norm is null;
+create unique index if not exists members_phone_norm_key on public.members(phone_norm) where phone_norm is not null;
+
+create or replace function public.ay_register(p jsonb)
+returns jsonb language plpgsql security definer set search_path = public as $$
+declare e text := nullif(lower(trim(coalesce(p->>'email',''))), ''); pn text := _norm_phone(p->>'phone'); m uuid; t uuid;
+begin
+  if e is not null and e !~ '^[^\s@]+@[^\s@]+\.[^\s@]{2,}$' then raise exception 'bad_email'; end if;
+  if pn is null or length(pn) < 8 then raise exception 'bad_phone'; end if;
+  if e is not null and exists (select 1 from members where email = e) then raise exception 'exists'; end if;
+  if exists (select 1 from members where phone_norm = pn) then raise exception 'phone_exists'; end if;
+  insert into members(email, name, phone, phone_norm, dob, gender, nationality, governorate, with_ay, relation)
+  values (e, trim(p->>'name'), p->>'phone', pn, nullif(p->>'dob','')::date, nullif(p->>'gender',''),
+          p->>'nationality', nullif(p->>'governorate',''), coalesce(p->>'withAY',''), nullif(p->>'relation',''))
+  returning id into m;
+  insert into profiles(member_id) values (m);
+  insert into sessions(member_id) values (m) returning token into t;
+  return jsonb_build_object('token', t, 'email', e, 'login', coalesce(e, pn), 'name', trim(p->>'name'));
+end $$;
+
+create or replace function public.ay_sign_in(p_email text)
+returns jsonb language plpgsql security definer set search_path = public as $$
+declare e text := lower(trim(p_email)); m uuid; n text; pn text; t uuid;
+begin
+  select id, name, phone_norm into m, n, pn from members where email = e;
+  if m is null then return null; end if;
+  insert into sessions(member_id) values (m) returning token into t;
+  return jsonb_build_object('token', t, 'email', e, 'login', e, 'name', n);
+end $$;
+
+create or replace function public.ay_sign_in_phone(p_phone text)
+returns jsonb language plpgsql security definer set search_path = public as $$
+declare pn text := _norm_phone(p_phone); m uuid; n text; e text; t uuid;
+begin
+  if pn is null or length(pn) < 8 then return null; end if;
+  select id, name, email into m, n, e from members where phone_norm = pn;
+  if m is null then return null; end if;
+  insert into sessions(member_id) values (m) returning token into t;
+  return jsonb_build_object('token', t, 'email', e, 'login', coalesce(e, pn), 'name', n);
+end $$;
+
+create or replace function public.ay_load(p_token uuid)
+returns jsonb language plpgsql security definer set search_path = public as $$
+declare m uuid := _member_of(p_token); r jsonb;
+begin
+  select jsonb_build_object(
+    'email', mb.email, 'login', coalesce(mb.email, mb.phone_norm), 'name', mb.name,
+    'prof', coalesce((select data from profiles where member_id = m), '{}'::jsonb),
+    'days', coalesce((select jsonb_object_agg(key, data) from days where member_id = m), '{}'::jsonb))
+  into r from members mb where mb.id = m;
+  return r;
+end $$;
+
+revoke all on function public.ay_sign_in_phone(text) from public;
+grant execute on function public.ay_sign_in_phone(text) to anon, authenticated;
+
+select count(*) as members, count(phone_norm) as with_phone from public.members;

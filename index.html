@@ -341,6 +341,7 @@ figure.ph figcaption{font-size:.7rem;color:var(--muted);text-align:center}
 .ihint{background:rgba(196,154,58,.11);border-inline-start:3px solid var(--gold);border-radius:10px;padding:10px 14px;font-size:.92rem;line-height:1.8;margin-block:8px}
 .cb{position:relative}.cbList{position:absolute;inset-inline:0;top:100%;z-index:30;margin:4px 0 0;padding:4px;list-style:none;max-height:240px;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 24px rgba(13,31,51,.14)}.cbList li{padding:8px 12px;border-radius:8px;cursor:pointer}.cbList li[role]:hover,.cbList li.on{background:var(--green-soft)}.cbList li.none{color:var(--muted);cursor:default}
 .privline{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted);margin:-6px 0 10px}.privline svg{width:14px;height:14px;flex:0 0 14px;color:var(--green)}
+.siWay{display:flex;gap:6px;background:var(--surface-2);border-radius:999px;padding:4px}.signinForm .siWay button{white-space:nowrap;flex:1;font:inherit;font-size:.84rem;border:0;border-radius:999px;padding:7px 10px;background:transparent;color:var(--ink);cursor:pointer}.signinForm .siWay button[aria-pressed="true"]{background:var(--green);color:#fff;font-weight:600;box-shadow:none}
 .dob{display:grid;grid-template-columns:1fr 1.4fr 1.2fr;gap:6px}
 .privnote{display:flex;gap:10px;align-items:flex-start;background:var(--green-soft);border-radius:12px;padding:10px 12px;font-size:.86rem;line-height:1.8;text-align:start}.privnote svg{flex:0 0 18px;width:18px;height:18px;margin-top:4px;color:var(--green)}
 .book{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:linear-gradient(135deg,var(--green-soft),var(--surface));border:1.5px solid var(--gold);border-radius:18px;padding:14px 16px;margin-block:4px}
@@ -1032,8 +1033,10 @@ footer p{font-size:.85rem;color:var(--muted)}
   </div>
   <form class="card setup signinForm" novalidate>
     <h3>تسجيل الدخول</h3>
-    <p class="muted" style="font-size:.88rem">ادخل بالبريد الإلكتروني الذي سجّلت به لتتابع عباداتك ورحلاتك.</p>
-    <div class="field"><label for="siEmail">البريد الإلكتروني</label><input type="email" id="siEmail" autocomplete="email" inputmode="email" dir="ltr" placeholder="name@example.com" required></div>
+    <p class="muted" style="font-size:.88rem">ادخل بالبريد الإلكتروني أو رقم الموبايل الذي سجّلت به لتتابع عباداتك ورحلاتك.</p>
+    <div class="seg siWay" role="group" aria-label="طريقة الدخول" hidden><button type="button" data-w="email" aria-pressed="true">البريد الإلكتروني</button><button type="button" data-w="phone" aria-pressed="false">رقم الموبايل</button></div>
+    <div class="field siPhoneF" hidden><label for="siPhone">رقم الموبايل</label><input type="tel" id="siPhone" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="01xxxxxxxxx"></div>
+    <div class="field siEmailF"><label for="siEmail">البريد الإلكتروني</label><input type="email" id="siEmail" autocomplete="email" inputmode="email" dir="ltr" placeholder="name@example.com"></div>
     <div class="siAdmin stack" style="gap:8px" hidden>
       <p class="muted" style="font-size:.85rem;margin:0">هذا بريد إدارة. اكتب كلمة المرور للدخول إلى لوحة الإدارة.</p>
       <div class="field"><label for="siPw">كلمة المرور</label><input type="password" id="siPw" dir="ltr" autocomplete="current-password"></div>
@@ -1048,7 +1051,7 @@ footer p{font-size:.85rem;color:var(--muted)}
   <form class="card setup regForm" novalidate>
     <h3 class="rgTitle">إنشاء حساب جديد</h3>
     <p class="muted" style="font-size:.88rem">بيانات التسجيل يطّلع عليها فريق عين اليقين للتواصل معك. أما عباداتك فخاصة بك وحدك، ولا يطّلع عليها أحد.</p>
-    <div class="field"><label for="rgEmail">البريد الإلكتروني</label><input type="email" id="rgEmail" autocomplete="email" inputmode="email" dir="ltr" placeholder="name@example.com" required></div>
+    <div class="field"><label for="rgEmail">البريد الإلكتروني <span class="muted" style="font-size:.8em">(اختياري)</span></label><input type="email" id="rgEmail" autocomplete="email" inputmode="email" dir="ltr" placeholder="name@example.com"></div>
     <div class="field"><label for="rgName">الاسم بالكامل</label><input type="text" id="rgName" autocomplete="name" required></div>
     <div class="two">
       <div class="field"><label for="rgPhone">رقم الموبايل</label><input type="tel" id="rgPhone" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="01xxxxxxxxx" required></div>
@@ -1510,6 +1513,7 @@ $('#audioFile').onchange=e=>{const f=e.target.files[0];if(!f)return;aud.src=URL.
 /* ---------- data layer: account (cloud) or this device (local) ---------- */
 const LKEY='ainyaqeen-v2',LOPT='ainyaqeen-localopt',SKEY='ainyaqeen-session';
 const normEmail=x=>String(x||'').trim().toLowerCase();
+const normPhone=x=>{let d=String(x||'').replace(/[٠-٩]/g,c=>c.charCodeAt(0)-1632).replace(/[۰-۹]/g,c=>c.charCodeAt(0)-1776).replace(/\D/g,'');if(d.startsWith('00'))d=d.slice(2);if(d.startsWith('20')&&d.length===12)d='0'+d.slice(2);if(d.startsWith('1')&&d.length===10)d='0'+d;return d;};
 const okEmail=x=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(x);
 let sess='';try{sess=localStorage.getItem(SKEY)||''}catch(e){}
 const setSess=e=>{sess=e||'';try{e?localStorage.setItem(SKEY,e):localStorage.removeItem(SKEY)}catch(_){}};
@@ -1525,7 +1529,7 @@ const SUPA={url:'https://yyvnoxhwojklujmzghep.supabase.co',key:'sb_publishable_5
 const TKEY='ainyaqeen-token';let stok='';try{stok=localStorage.getItem(TKEY)||''}catch(e){}
 const setTok=t=>{stok=t||'';try{t?localStorage.setItem(TKEY,t):localStorage.removeItem(TKEY)}catch(_){}};
 async function rpc(f,b){const r=await fetch(SUPA.url+'/rest/v1/rpc/'+f,{method:'POST',headers:{apikey:SUPA.key,'Content-Type':'application/json'},body:JSON.stringify(b||{})});const tx=await r.text();let j=null;try{j=tx?JSON.parse(tx):null}catch(e){}if(!r.ok){const er=new Error((j&&j.message)||('http_'+r.status));er.code=j&&j.message;throw er;}return j;}
-async function supaLoad(){const d=await rpc('ay_load',{p_token:stok});Store.prof=d.prof||{};Store.days=d.days||{};Store.prof.reg=Object.assign({},Store.prof.reg||{},{email:d.email,name:d.name});setSess(d.email);saveLocal();}
+async function supaLoad(){const d=await rpc('ay_load',{p_token:stok});Store.prof=d.prof||{};Store.days=d.days||{};Store.prof.reg=Object.assign({},Store.prof.reg||{},{email:d.login,name:d.name});setSess(d.login);saveLocal();}
 const wq={},inflight={},lastLocal={};const busy=id=>!!(inflight[id]||(wq[id]&&wq[id].pending)||(Date.now()-(lastLocal[id]||0)<2500));
 function queueWrite(kind,key){
  if(Store.mode==='local'){saveLocal();return;}
@@ -1608,7 +1612,12 @@ document.addEventListener('click',e=>{const v=e.target.closest('.view');if(!v)re
  else if(e.target.closest('.goSignup')){v.dataset.auth='up';refreshPriv(true);window.scrollTo(0,0);}
  else if(e.target.closest('.goSignin')){v.dataset.auth='';refreshPriv(true);window.scrollTo(0,0);}});
 function wireSignin(slot,v){const f=slot.querySelector('.signinForm'),em=f.querySelector('#siEmail'),err=f.querySelector('.siErr');
- f.onsubmit=e=>{e.preventDefault();const x=normEmail(em.value);if(!okEmail(x))return err.textContent='اكتب بريدًا إلكترونيًا صحيحًا.',em.focus();
+ let way='email';const wayEl=f.querySelector('.siWay'),phF=f.querySelector('.siPhoneF'),emF=f.querySelector('.siEmailF'),phI=f.querySelector('#siPhone');
+ if(Store.mode==='supa'){wayEl.hidden=false;wayEl.querySelectorAll('button').forEach(b=>b.onclick=()=>{way=b.dataset.w;wayEl.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));phF.hidden=way!=='phone';emF.hidden=way!=='email';f.querySelector('.siAdmin').hidden=true;delete f.dataset.member;err.textContent='';(way==='phone'?phI:em).focus();});}
+ f.onsubmit=e=>{e.preventDefault();
+  if(Store.mode==='supa'&&way==='phone'){const p=normPhone(phI.value);if(p.length<8)return err.textContent='اكتب رقم موبايل صحيح.',phI.focus();const btn=f.querySelector('[type=submit]');btn.disabled=true;err.textContent='';
+   rpc('ay_sign_in_phone',{p_phone:p}).then(async d=>{if(!d){err.textContent='لا يوجد حساب بهذا الرقم. أنشئ حسابًا جديدًا.';return;}setTok(d.token);await supaLoad();v.dataset.auth='';refreshPriv(true);}).catch(()=>{err.textContent='تعذّر الاتصال، تأكد من الإنترنت وحاول مرة أخرى.';}).finally(()=>{btn.disabled=false;});return;}
+  const x=normEmail(em.value);if(!okEmail(x))return err.textContent='اكتب بريدًا إلكترونيًا صحيحًا.',em.focus();
   if(Store.mode==='supa'){const btn=f.querySelector('[type=submit]');const adm=f.querySelector('.siAdmin'),pw=f.querySelector('#siPw');
    if(!adm.hidden&&!f.dataset.member){if(!pw.value)return err.textContent='اكتب كلمة المرور.',pw.focus();btn.disabled=true;err.textContent='';
     fetch(SUPA.url+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:SUPA.key,'Content-Type':'application/json'},body:JSON.stringify({email:x,password:pw.value})}).then(r=>r.ok?r.json():Promise.reject()).then(j=>{try{sessionStorage.setItem('ainyaqeen-admin',JSON.stringify({access:j.access_token,refresh:j.refresh_token,exp:Date.now()+(j.expires_in||3600)*1000}))}catch(e){}location.href='admin.html';}).catch(()=>{err.textContent='كلمة المرور غير صحيحة.';btn.disabled=false;});return;}
@@ -1640,10 +1649,11 @@ function wireReg(slot,v,signup){const R=Object.assign({},signup?{}:(Store.prof.r
  f.querySelectorAll('.rgWith button').forEach(b=>b.onclick=()=>{R.withAY=b.dataset.v;paint();});
  if(!signup&&Store.prof.reg){const c=f.querySelector('.cancelReg');c.hidden=false;c.onclick=()=>{v.dataset.reg='';refreshPriv(true);};}
  f.onsubmit=e=>{e.preventDefault();const err=f.querySelector('.rgErr');const phone=ph.value.replace(/[^\d+]/g,'');const mail=normEmail(em.value);
-  if(!okEmail(mail))return err.textContent='اكتب بريدًا إلكترونيًا صحيحًا.',em.focus();
+  if(mail&&!okEmail(mail))return err.textContent='اكتب بريدًا إلكترونيًا صحيحًا، أو اتركه فارغًا.',em.focus();
+  if(!mail&&Store.mode!=='supa')return err.textContent='اكتب بريدًا إلكترونيًا صحيحًا.',em.focus();
   if(signup&&Store.mode==='local'){const ex=readAcct(mail);if(ex&&ex.prof&&ex.prof.reg)return err.textContent='يوجد حساب بهذا البريد بالفعل، سجّل الدخول.';}
   if(nm.value.trim().length<3)return err.textContent='اكتب الاسم بالكامل.',nm.focus();
-  if(phone.replace(/\D/g,'').length<8)return err.textContent='اكتب رقم موبايل صحيح.',ph.focus();
+  if(normPhone(phone).length<8)return err.textContent='اكتب رقم موبايل صحيح.',ph.focus();
   if(!db.value)return err.textContent='اختر تاريخ الميلاد كاملًا (اليوم والشهر والسنة) بشكل صحيح.',f.querySelector('#dobD').focus();
   if(!COUNTRIES.includes(nat.value.trim()))return err.textContent='اختر الجنسية من القائمة.',nat.focus();
   if(nat.value.trim()==='مصر'&&!GOVS.includes(gov.value.trim()))return err.textContent='اختر المحافظة من القائمة.',gov.focus();
@@ -1651,7 +1661,7 @@ function wireReg(slot,v,signup){const R=Object.assign({},signup?{}:(Store.prof.r
   if(!R.withAY)return err.textContent='اختر هل أنت مسافر مع عين اليقين.';
   if(R.gender==='female'&&!rel.value)return err.textContent='اختاري علاقتك بعين اليقين.',rel.focus();
   const reg={email:mail,name:nm.value.trim(),phone,dob:db.value,gender:R.gender,nationality:nat.value.trim(),governorate:nat.value.trim()==='مصر'?gov.value.trim():'',withAY:R.withAY||'',relation:R.gender==='female'?rel.value:'',at:(Store.prof.reg&&Store.prof.reg.at)||new Date().toISOString(),updated:new Date().toISOString()};
-  if(Store.mode==='supa'&&signup){const btn=f.querySelector('[type=submit]');btn.disabled=true;err.textContent='';rpc('ay_register',{p:reg}).then(d=>{setTok(d.token);setSess(d.email);Store.prof={reg:{email:d.email,name:d.name}};Store.days={};v.dataset.reg='';v.dataset.auth='';queueWrite('prof');refreshPriv(true);}).catch(e=>{err.textContent=e.code==='exists'?'يوجد حساب بهذا البريد بالفعل، سجّل الدخول.':'تعذّر إنشاء الحساب، تأكد من الإنترنت وحاول مرة أخرى.';}).finally(()=>{btn.disabled=false;});return;}
+  if(Store.mode==='supa'&&signup){const btn=f.querySelector('[type=submit]');btn.disabled=true;err.textContent='';rpc('ay_register',{p:reg}).then(d=>{setTok(d.token);setSess(d.login);Store.prof={reg:{email:d.login,name:d.name}};Store.days={};v.dataset.reg='';v.dataset.auth='';queueWrite('prof');refreshPriv(true);}).catch(e=>{err.textContent=e.code==='exists'?'يوجد حساب بهذا البريد بالفعل، سجّل الدخول.':e.code==='phone_exists'?'يوجد حساب بهذا الرقم بالفعل، سجّل الدخول برقم الموبايل.':'تعذّر إنشاء الحساب، تأكد من الإنترنت وحاول مرة أخرى.';}).finally(()=>{btn.disabled=false;});return;}
   if(signup){setSess(mail);if(Store.mode==='local'){Store.prof={};Store.days={};}}Store.prof.reg=reg;v.dataset.reg='';v.dataset.auth='';queueWrite('prof');saveRegShared(reg);refreshPriv(true);};}
 async function saveRegShared(reg){if(Store.mode!=='cloud'||!regRef)return;try{await regRef.set(Object.assign({},reg));}catch(e){}}
 function wireSetup(slot,v){const isNew=v.dataset.editing==='new'||!trip();const t=isNew?{type:'umrah',start:todayISO(),days:10}:trip();let type=t.type;
