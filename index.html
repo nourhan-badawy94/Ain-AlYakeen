@@ -342,6 +342,7 @@ figure.ph figcaption{font-size:.7rem;color:var(--muted);text-align:center}
 .cb{position:relative}.cbList{position:absolute;inset-inline:0;top:100%;z-index:30;margin:4px 0 0;padding:4px;list-style:none;max-height:240px;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 24px rgba(13,31,51,.14)}.cbList li{padding:8px 12px;border-radius:8px;cursor:pointer}.cbList li[role]:hover,.cbList li.on{background:var(--green-soft)}.cbList li.none{color:var(--muted);cursor:default}
 .privline{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted);margin:-6px 0 10px}.privline svg{width:14px;height:14px;flex:0 0 14px;color:var(--green)}
 .siWay{display:flex;gap:6px;background:var(--surface-2);border-radius:999px;padding:4px}.signinForm .siWay button{white-space:nowrap;flex:1;font:inherit;font-size:.84rem;border:0;border-radius:999px;padding:7px 10px;background:transparent;color:var(--ink);cursor:pointer}.signinForm .siWay button[aria-pressed="true"]{background:var(--green);color:#fff;font-weight:600;box-shadow:none}
+.orSep{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.85rem;margin:2px 0}.orSep::before,.orSep::after{content:"";flex:1;height:1px;background:var(--line)}
 .dob{display:grid;grid-template-columns:1fr 1.4fr 1.2fr;gap:6px}
 .privnote{display:flex;gap:10px;align-items:flex-start;background:var(--green-soft);border-radius:12px;padding:10px 12px;font-size:.86rem;line-height:1.8;text-align:start}.privnote svg{flex:0 0 18px;width:18px;height:18px;margin-top:4px;color:var(--green)}
 .book{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:linear-gradient(135deg,var(--green-soft),var(--surface));border:1.5px solid var(--gold);border-radius:18px;padding:14px 16px;margin-block:4px}
@@ -1034,9 +1035,9 @@ footer p{font-size:.85rem;color:var(--muted)}
   <form class="card setup signinForm" novalidate>
     <h3>تسجيل الدخول</h3>
     <p class="muted" style="font-size:.88rem">ادخل بالبريد الإلكتروني أو رقم الموبايل الذي سجّلت به لتتابع عباداتك ورحلاتك.</p>
-    <div class="seg siWay" role="group" aria-label="طريقة الدخول" hidden><button type="button" data-w="email" aria-pressed="true">البريد الإلكتروني</button><button type="button" data-w="phone" aria-pressed="false">رقم الموبايل</button></div>
-    <div class="field siPhoneF" hidden><label for="siPhone">رقم الموبايل</label><input type="tel" id="siPhone" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="01xxxxxxxxx"></div>
     <div class="field siEmailF"><label for="siEmail">البريد الإلكتروني</label><input type="email" id="siEmail" autocomplete="email" inputmode="email" dir="ltr" placeholder="name@example.com"></div>
+    <div class="orSep siPhoneF" hidden><span>أو</span></div>
+    <div class="field siPhoneF" hidden><label for="siPhone">رقم الموبايل</label><input type="tel" id="siPhone" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="01xxxxxxxxx"></div>
     <div class="siAdmin stack" style="gap:8px" hidden>
       <p class="muted" style="font-size:.85rem;margin:0">هذا بريد إدارة. اكتب كلمة المرور للدخول إلى لوحة الإدارة.</p>
       <div class="field"><label for="siPw">كلمة المرور</label><input type="password" id="siPw" dir="ltr" autocomplete="current-password"></div>
@@ -1612,10 +1613,11 @@ document.addEventListener('click',e=>{const v=e.target.closest('.view');if(!v)re
  else if(e.target.closest('.goSignup')){v.dataset.auth='up';refreshPriv(true);window.scrollTo(0,0);}
  else if(e.target.closest('.goSignin')){v.dataset.auth='';refreshPriv(true);window.scrollTo(0,0);}});
 function wireSignin(slot,v){const f=slot.querySelector('.signinForm'),em=f.querySelector('#siEmail'),err=f.querySelector('.siErr');
- let way='email';const wayEl=f.querySelector('.siWay'),phF=f.querySelector('.siPhoneF'),emF=f.querySelector('.siEmailF'),phI=f.querySelector('#siPhone');
- if(Store.mode==='supa'){wayEl.hidden=false;wayEl.querySelectorAll('button').forEach(b=>b.onclick=()=>{way=b.dataset.w;wayEl.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));phF.hidden=way!=='phone';emF.hidden=way!=='email';f.querySelector('.siAdmin').hidden=true;delete f.dataset.member;err.textContent='';(way==='phone'?phI:em).focus();});}
+ const phI=f.querySelector('#siPhone');if(Store.mode==='supa')f.querySelectorAll('.siPhoneF').forEach(x=>x.hidden=false);
+ em.addEventListener('input',()=>{if(em.value.trim())phI.value='';});phI.addEventListener('input',()=>{if(phI.value.trim()){em.value='';f.querySelector('.siAdmin').hidden=true;delete f.dataset.member;}});
  f.onsubmit=e=>{e.preventDefault();
-  if(Store.mode==='supa'&&way==='phone'){const p=normPhone(phI.value);if(p.length<8)return err.textContent='اكتب رقم موبايل صحيح.',phI.focus();const btn=f.querySelector('[type=submit]');btn.disabled=true;err.textContent='';
+  if(Store.mode==='supa'&&!em.value.trim()&&!phI.value.trim())return err.textContent='اكتب البريد الإلكتروني أو رقم الموبايل.',em.focus();
+  if(Store.mode==='supa'&&!em.value.trim()){const p=normPhone(phI.value);if(p.length<8)return err.textContent='اكتب رقم موبايل صحيح.',phI.focus();const btn=f.querySelector('[type=submit]');btn.disabled=true;err.textContent='';
    rpc('ay_sign_in_phone',{p_phone:p}).then(async d=>{if(!d){err.textContent='لا يوجد حساب بهذا الرقم. أنشئ حسابًا جديدًا.';return;}setTok(d.token);await supaLoad();v.dataset.auth='';refreshPriv(true);}).catch(()=>{err.textContent='تعذّر الاتصال، تأكد من الإنترنت وحاول مرة أخرى.';}).finally(()=>{btn.disabled=false;});return;}
   const x=normEmail(em.value);if(!okEmail(x))return err.textContent='اكتب بريدًا إلكترونيًا صحيحًا.',em.focus();
   if(Store.mode==='supa'){const btn=f.querySelector('[type=submit]');const adm=f.querySelector('.siAdmin'),pw=f.querySelector('#siPw');
