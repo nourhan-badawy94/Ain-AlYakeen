@@ -342,6 +342,9 @@ figure.ph figcaption{font-size:.7rem;color:var(--muted);text-align:center}
 .cb{position:relative}.cbList{position:absolute;inset-inline:0;top:100%;z-index:30;margin:4px 0 0;padding:4px;list-style:none;max-height:240px;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 24px rgba(13,31,51,.14)}.cbList li{padding:8px 12px;border-radius:8px;cursor:pointer}.cbList li[role]:hover,.cbList li.on{background:var(--green-soft)}.cbList li.none{color:var(--muted);cursor:default}
 .privline{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted);margin:-6px 0 10px}.privline svg{width:14px;height:14px;flex:0 0 14px;color:var(--green)}
 .siWay{display:flex;gap:6px;background:var(--surface-2);border-radius:999px;padding:4px}.signinForm .siWay button{white-space:nowrap;flex:1;font:inherit;font-size:.84rem;border:0;border-radius:999px;padding:7px 10px;background:transparent;color:var(--ink);cursor:pointer}.signinForm .siWay button[aria-pressed="true"]{background:var(--green);color:#fff;font-weight:600;box-shadow:none}
+.qlinks{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:-4px 0 4px}.qlinks span{font-size:.82rem;color:var(--muted)}.qlinks button{font:inherit;font-size:.86rem;font-weight:600;border:1.5px solid var(--green);color:var(--green);background:transparent;border-radius:999px;padding:6px 14px;cursor:pointer}.qlinks button:hover{background:var(--green-soft)}
+.inlink{font:inherit;font-size:.9rem;font-weight:600;color:var(--green);background:none;border:0;padding:4px 0;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+#mz-u,#mz-h,#umrah-again{scroll-margin-top:calc(var(--hdr) + 64px)}
 .orSep{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.85rem;margin:2px 0}.orSep::before,.orSep::after{content:"";flex:1;height:1px;background:var(--line)}
 .dob{display:grid;grid-template-columns:1fr 1.4fr 1.2fr;gap:6px}
 .privnote{display:flex;gap:10px;align-items:flex-start;background:var(--green-soft);border-radius:12px;padding:10px 12px;font-size:.86rem;line-height:1.8;text-align:start}.privnote svg{flex:0 0 18px;width:18px;height:18px;margin-top:4px;color:var(--green)}
@@ -759,6 +762,7 @@ footer p{font-size:.85rem;color:var(--muted)}
     </div>
   </div>
   <div class="book"><div class="book-t"><b>احجز عمرتك مع عين اليقين</b><span>للاستفسار والحجز تواصلوا معنا</span></div><div class="book-a"><a class="btn green sm" href="https://wa.me/201005005409?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%D8%A7%D9%84%D8%B9%D9%85%D8%B1%D8%A9%20%D9%85%D8%B9%20%D8%B9%D9%8A%D9%86%20%D8%A7%D9%84%D9%8A%D9%82%D9%8A%D9%86" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.7 11.8 11.8 0 004.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>واتساب</a><a class="btn ghost sm" href="tel:+201005005409"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 005 5L15 12l5 2v4a2 2 0 01-2 2A16 16 0 013 5a2 2 0 012-2z"/></svg>اتصال</a></div></div>
+  <div class="qlinks"><span>روابط مهمة</span><button type="button" data-jump="mz-u">محظورات الإحرام</button><button type="button" data-jump="umrah-again">عمرة أخرى أو عمرة عن غيرك</button></div>
 
   <div class="stack">
     <div class="sec-head"><h2>أركان العمرة</h2><small>أربعة لا تصح العمرة بدونها</small></div>
@@ -787,7 +791,7 @@ footer p{font-size:.85rem;color:var(--muted)}
   </div>
 
   <div class="stack">
-    <div class="sec-head"><h2>محظورات الإحرام</h2><small>تُجتنب من نية الإحرام حتى التحلل</small></div>
+    <div class="sec-head" id="mz-u"><h2>محظورات الإحرام</h2><small>تُجتنب من نية الإحرام حتى التحلل</small></div>
     <ol class="mz" id="mz"></ol>
   </div>
 </section>
@@ -799,6 +803,7 @@ footer p{font-size:.85rem;color:var(--muted)}
     <div class="txt"><h1>مناسك الحج</h1><p class="tag">﴿وَأَذِّن فِي النَّاسِ بِالْحَجِّ يَأْتُوكَ رِجَالًا﴾</p><p class="by">إعداد فريق الدعوة والتوعية بأكاديمية عين اليقين · تحت إشراف المعلمة د. هالة الجعلي</p></div>
   </div>
   <div class="book"><div class="book-t"><b>احجز حجك مع عين اليقين</b><span>للاستفسار والحجز تواصلوا معنا</span></div><div class="book-a"><a class="btn green sm" href="https://wa.me/201005005409?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%D8%A7%D9%84%D8%AD%D8%AC%20%D9%85%D8%B9%20%D8%B9%D9%8A%D9%86%20%D8%A7%D9%84%D9%8A%D9%82%D9%8A%D9%86" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.7 11.8 11.8 0 004.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>واتساب</a><a class="btn ghost sm" href="tel:+201005005409"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 005 5L15 12l5 2v4a2 2 0 01-2 2A16 16 0 013 5a2 2 0 012-2z"/></svg>اتصال</a></div></div>
+  <div class="qlinks"><span>روابط مهمة</span><button type="button" data-jump="mz-h">محظورات الإحرام</button></div>
 
   <div class="stack">
     <div class="sec-head"><h2>اختر نوع نسكك</h2><small>تظهر لك الخطوات المناسبة لنسكك</small></div>
@@ -822,7 +827,7 @@ footer p{font-size:.85rem;color:var(--muted)}
   </div>
 
   <div class="stack">
-    <div class="sec-head"><h2>محظورات الإحرام</h2><small>تُجتنب من نية الإحرام حتى التحلل</small></div>
+    <div class="sec-head" id="mz-h"><h2>محظورات الإحرام</h2><small>تُجتنب من نية الإحرام حتى التحلل</small></div>
     <ol class="mz" id="mzH"></ol>
   </div>
   <div class="notice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg><p>هذا ملخص ميسّر لصفة الحج. للتفاصيل الفقهية وأحوال الأعذار، يُرجع إلى المشرف الشرعي للرحلة.</p></div>
@@ -1145,7 +1150,8 @@ const steps=[
  <p>ولا مانع من إضافة الاشتراط عند الخوف من عدم التمكن من إتمام النسك لمرض أو ظرف متوقع:</p>
  <div class="quote"><p class="sacred">فَإِنْ حَبَسَنِي حَابِسٌ، فَمَحِلِّي حَيْثُ حَبَسْتَنِي</p></div>
  <div class="ihint"><b>خاص بالمرأة المنتقبة:</b> عند المرور بالميقات تخلع النقاب وتُسدل الطرحة على وجهها، وتخلع القفازين وتضعهما تحت خمارها قدر المستطاع.</div>
- <p>ومن وقت الإحرام عند الميقات <b>تبدأ التلبية</b>.</p>`},
+ <p>ومن وقت الإحرام عند الميقات <b>تبدأ التلبية</b>.</p>
+ <button type="button" class="inlink" data-jump="mz-u">اطّلع على محظورات الإحرام ←</button>`},
  {k:'door',img:'door2',t:'بدء التلبية ودخول المسجد الحرام',cap:'معتمرون في طريقهم إلى أحد أبواب المسجد الحرام',b:`<p><b>التلبية تبدأ من وقت الإحرام</b> عند المرور بالميقات، وليس من وقت الخروج من الفندق، ونُكثر منها في الطريق حتى رؤية الكعبة. وعند باب الحرم يُسنّ الدخول بالقدم اليمنى مع دعاء دخول المسجد:</p>
  <div class="quote"><p class="sacred">اللَّهُمَّ صَلِّ عَلَى رَسُولِ اللَّهِ، أَعُوذُ بِاللَّهِ الْعَظِيمِ، وَبِوَجْهِهِ الْكَرِيمِ، وَسُلْطَانِهِ الْقَدِيمِ، مِنَ الشَّيْطَانِ الرَّجِيمِ. اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ.</p></div>`},
  {k:'tawaf',img:'kaaba2',t:'الطواف',cap:'الكعبة المشرفة من جهة ركن الحجر الأسود، ويبدأ الطواف من ركن الحجر الأسود',laps:'tawaf',b:`<p>عند رؤية الكعبة نتوقف عن التلبية، ونبدأ الطواف من عند الحجر الأسود، نشير إليه ونقول: <b class="sacred" style="font-size:1.15rem;white-space:nowrap">اللَّهُ&nbsp;أَكْبَرُ</b></p>
@@ -1175,7 +1181,8 @@ const steps=[
  <div class="ihint">إذا أرادت المرأة أن تقصّر في الفندق، <b>تظل على إحرامها حتى تقصّر</b>، فتجتنب جميع محظورات الإحرام إلى أن تقصّر.</div>
  <p>وعند الخروج من المسجد الحرام، نخرج بالقدم اليسرى ونقول:</p>
  <div class="quote"><p class="sacred">بِسْمِ اللَّهِ وَالسَّلَامُ عَلَى رَسُولِ اللَّهِ، اللَّهُمَّ اعْصِمْنِي مِنَ الشَّيْطَانِ</p></div>
- <p class="closing">وبهذا تنتهي مناسك العمرة، تقبّل الله طاعتكم وصالح الأعمال</p>`}
+ <p class="closing">وبهذا تنتهي مناسك العمرة، تقبّل الله طاعتكم وصالح الأعمال</p>
+ <button type="button" class="inlink" data-jump="umrah-again">تريد أداء عمرة أخرى أو عمرة عن غيرك؟ ←</button>`}
 ];
 const lapState={tawaf:0,sai:0};
 const lapMsg={
