@@ -344,7 +344,8 @@ figure.ph figcaption{font-size:.7rem;color:var(--muted);text-align:center}
 .siWay{display:flex;gap:6px;background:var(--surface-2);border-radius:999px;padding:4px}.signinForm .siWay button{white-space:nowrap;flex:1;font:inherit;font-size:.84rem;border:0;border-radius:999px;padding:7px 10px;background:transparent;color:var(--ink);cursor:pointer}.signinForm .siWay button[aria-pressed="true"]{background:var(--green);color:#fff;font-weight:600;box-shadow:none}
 .qlinks{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:-4px 0 4px}.qlinks span{font-size:.82rem;color:var(--muted)}.qlinks button{font:inherit;font-size:.86rem;font-weight:600;border:1.5px solid var(--green);color:var(--green);background:transparent;border-radius:999px;padding:6px 14px;cursor:pointer}.qlinks button:hover{background:var(--green-soft)}
 .inlink{font:inherit;font-size:.9rem;font-weight:600;color:var(--green);background:none;border:0;padding:4px 0;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
-#mz-u,#mz-h,#umrah-again{scroll-margin-top:calc(var(--hdr) + 64px)}
+#mz-u,#mz-h,#umrah-again,.mk{scroll-margin-top:calc(var(--hdr) + 64px)}
+.mk h3{font-family:var(--f-display);color:var(--navy);font-size:1.2rem;margin:0}.mk .quote small{display:block;color:var(--muted);font-size:.8rem;margin-top:4px}.mklist{margin:0;padding-inline-start:20px;line-height:1.9}
 .orSep{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.85rem;margin:2px 0}.orSep::before,.orSep::after{content:"";flex:1;height:1px;background:var(--line)}
 .dob{display:grid;grid-template-columns:1fr 1.4fr 1.2fr;gap:6px}
 .privnote{display:flex;gap:10px;align-items:flex-start;background:var(--green-soft);border-radius:12px;padding:10px 12px;font-size:.86rem;line-height:1.8;text-align:start}.privnote svg{flex:0 0 18px;width:18px;height:18px;margin-top:4px;color:var(--green)}
@@ -671,6 +672,7 @@ footer p{font-size:.85rem;color:var(--muted)}
       <div class="drow"><button class="dlabel" data-go="umrah" data-trip="1">رحلات إيمانية</button><button class="dgroup" aria-expanded="false" aria-label="عرض أقسام رحلات إيمانية"><svg class="dchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button></div>
       <div class="dsub" hidden>
       <button class="sub" data-go="umrah">مناسك العمرة</button>
+      <button class="sub" data-go="makkah">في مكة: بعد أداء العمرة</button>
       <button class="sub" data-go="hajj">مناسك الحج</button>
       <button class="sub" data-go="counter">عدّاد الطواف والسعي</button>
       <button class="sub" data-go="duaa">أدعية من الكتاب والسنة</button>
@@ -762,7 +764,7 @@ footer p{font-size:.85rem;color:var(--muted)}
     </div>
   </div>
   <div class="book"><div class="book-t"><b>احجز عمرتك مع عين اليقين</b><span>للاستفسار والحجز تواصلوا معنا</span></div><div class="book-a"><a class="btn green sm" href="https://wa.me/201005005409?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%D8%A7%D9%84%D8%B9%D9%85%D8%B1%D8%A9%20%D9%85%D8%B9%20%D8%B9%D9%8A%D9%86%20%D8%A7%D9%84%D9%8A%D9%82%D9%8A%D9%86" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.7 11.8 11.8 0 004.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>واتساب</a><a class="btn ghost sm" href="tel:+201005005409"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 005 5L15 12l5 2v4a2 2 0 01-2 2A16 16 0 013 5a2 2 0 012-2z"/></svg>اتصال</a></div></div>
-  <div class="qlinks"><span>روابط مهمة</span><button type="button" data-jump="mz-u">محظورات الإحرام</button><button type="button" data-jump="umrah-again">عمرة أخرى أو عمرة عن غيرك</button></div>
+  <div class="qlinks"><span>روابط مهمة</span><button type="button" data-jump="mz-u">محظورات الإحرام</button><button type="button" data-go="makkah" data-anchor="umrah-again">عمرة أخرى أو عمرة عن غيرك</button><button type="button" data-go="makkah" data-anchor="mk-tawaf">طواف التطوع</button></div>
 
   <div class="stack">
     <div class="sec-head"><h2>أركان العمرة</h2><small>أربعة لا تصح العمرة بدونها</small></div>
@@ -777,17 +779,6 @@ footer p{font-size:.85rem;color:var(--muted)}
   <div class="stack">
     <div class="sec-head"><h2>المناسك خطوة بخطوة</h2><small>اضغط على أي خطوة لفتحها</small></div>
     <div class="stack" id="steps"></div>
-    <div class="card stack" style="gap:10px;margin-top:6px" id="umrah-again">
-      <h3>إذا أردت أداء عمرة أخرى</h3>
-      <p>من كان في مكة وأراد أن يعتمر مرة أخرى، يخرج إلى الحِلّ ليُحرم منه، وأقربه <b>مسجد السيدة عائشة بالتنعيم</b>، فيغتسل ويلبس ملابس الإحرام، ثم يذهب إلى الحِلّ (مسجد السيدة عائشة بالتنعيم) ينوي العمرة ويلبّي، ويرجع إلى المسجد الحرام فيؤدي نفس المناسك خطوة بخطوة: الطواف ثم السعي ثم الحلق أو التقصير.</p>
-      <p><b>إن كانت العمرة عن نفسك</b> تقول عند الإحرام:</p>
-      <div class="quote"><p class="sacred">لَبَّيْكَ اللَّهُمَّ عُمْرَةً، عَنْ نَفْسِي، خَالِصَةً لِوَجْهِكَ، لَا سُمْعَةَ فِيهَا وَلَا رِيَاءَ</p></div>
-      <p><b>وإن كانت العمرة عن غيرك</b> (كمتوفى أو عاجز عن أدائها بنفسه) تقول عند الإحرام:</p>
-      <div class="quote"><p class="sacred">لَبَّيْكَ اللَّهُمَّ عُمْرَةً عَنْ [اسْمِ الشَّخْصِ]، خَالِصَةً لِوَجْهِكَ، لَا سُمْعَةَ فِيهَا وَلَا رِيَاءَ</p><p class="note">تذكر اسم من تعتمر عنه مكان [اسم الشخص]</p></div>
-      <p class="muted" style="font-size:.88rem">ويُشترط لمن يعتمر عن غيره أن يكون قد أدّى عمرته عن نفسه أولًا.</p>
-      <p>ويجوز الإحرام للعمرة الثانية <b>من عرفات</b> أيضًا لأنها من الحِلّ، فمن ذهب لزيارة جبل عرفات يمكنه أن يُحرم من هناك.</p>
-      <div class="ihint">ولكن هَدْي النبي ﷺ وأصحابه <b>عمرة واحدة في السفرة الواحدة</b>.</div>
-    </div>
   </div>
 
   <div class="stack">
@@ -797,6 +788,62 @@ footer p{font-size:.85rem;color:var(--muted)}
 </section>
 
 <!-- ================= HAJJ ================= -->
+<section class="view narrow" id="v-makkah" hidden>
+  <div class="sec-head"><h2>في مكة</h2><small>كيف تغتنم أيامك في مكة بعد أداء العمرة</small></div>
+  <div class="qlinks"><span>في هذه الصفحة</span><button type="button" data-jump="mk-tawaf">طواف التطوع</button><button type="button" data-jump="umrah-again">عمرة أخرى</button><button type="button" data-jump="mk-haram">الصلاة في الحرم</button><button type="button" data-jump="mk-zamzam">زمزم</button><button type="button" data-jump="mk-madina">زيارة المدينة</button></div>
+  <div class="stack" style="gap:16px">
+    <div class="card stack mk" id="mk-tawaf">
+      <h3>طواف التطوع</h3>
+      <p>بعد أداء العمرة، من أعظم ما تغتنم به وقتك في مكة أن تُكثر من الطواف حول البيت، فهو عبادة لا تكون إلا هناك.</p>
+      <p><b>فضله:</b></p>
+      <div class="quote"><p class="sacred">قال ﷺ: «مَنْ طَافَ بِهَذَا الْبَيْتِ أُسْبُوعًا فَأَحْصَاهُ، كَانَ كَعِتْقِ رَقَبَةٍ»</p><small>رواه الترمذي</small></div>
+      <div class="quote"><p class="sacred">وقال ﷺ: «لَا يَضَعُ قَدَمًا وَلَا يَرْفَعُ أُخْرَى إِلَّا حَطَّ اللَّهُ عَنْهُ بِهَا خَطِيئَةً، وَكَتَبَ لَهُ بِهَا حَسَنَةً»</p><small>رواه الترمذي</small></div>
+      <p><b>كيف يكون؟</b></p>
+      <ul class="mklist">
+        <li>سبعة أشواط تبدأ من الحجر الأسود وتنتهي عنده، مثل طواف العمرة.</li>
+        <li>لا يحتاج إلى إحرام، ويطوف بملابسه العادية.</li>
+        <li>يُشترط أن يكون على وضوء.</li>
+        <li>لا اضطباع فيه ولا رَمَل، فهما خاصان بطواف القدوم والعمرة.</li>
+        <li>لا سعي بعده.</li>
+        <li>يُسنّ بعده صلاة ركعتين خلف مقام إبراهيم أو في أي مكان في المسجد.</li>
+      </ul>
+      <div class="ihint"><b>تنبيه:</b> اختر أوقاتًا أقل ازدحامًا، وتجنّب مزاحمة الناس، خاصة عند الحجر الأسود.</div>
+      <button type="button" class="inlink" data-go="counter">افتح عدّاد الأشواط ←</button>
+    </div>
+    <div class="card stack mk" id="umrah-again">
+      <h3>عمرة أخرى أو عمرة عن غيرك</h3>
+      <p>من كان في مكة وأراد أن يعتمر مرة أخرى، يخرج إلى الحِلّ ليُحرم منه، وأقربه <b>مسجد السيدة عائشة بالتنعيم</b>، فيغتسل ويلبس ملابس الإحرام، ثم يذهب إلى الحِلّ (مسجد السيدة عائشة بالتنعيم) ينوي العمرة ويلبّي، ويرجع إلى المسجد الحرام فيؤدي نفس المناسك خطوة بخطوة: الطواف ثم السعي ثم الحلق أو التقصير.</p>
+      <p><b>إن كانت العمرة عن نفسك</b> تقول عند الإحرام:</p>
+      <div class="quote"><p class="sacred">لَبَّيْكَ اللَّهُمَّ عُمْرَةً، عَنْ نَفْسِي، خَالِصَةً لِوَجْهِكَ، لَا سُمْعَةَ فِيهَا وَلَا رِيَاءَ</p></div>
+      <p><b>وإن كانت العمرة عن غيرك</b> (كمتوفى أو عاجز عن أدائها بنفسه) تقول عند الإحرام:</p>
+      <div class="quote"><p class="sacred">لَبَّيْكَ اللَّهُمَّ عُمْرَةً عَنْ [اسْمِ الشَّخْصِ]، خَالِصَةً لِوَجْهِكَ، لَا سُمْعَةَ فِيهَا وَلَا رِيَاءَ</p><p class="note">تذكر اسم من تعتمر عنه مكان [اسم الشخص]</p></div>
+      <p class="muted" style="font-size:.88rem">ويُشترط لمن يعتمر عن غيره أن يكون قد أدّى عمرته عن نفسه أولًا.</p>
+      <p>ويجوز الإحرام للعمرة الثانية <b>من عرفات</b> أيضًا لأنها من الحِلّ، فمن ذهب لزيارة جبل عرفات يمكنه أن يُحرم من هناك.</p>
+      <div class="ihint">ولكن هَدْي النبي ﷺ وأصحابه <b>عمرة واحدة في السفرة الواحدة</b>.</div>
+    </div>
+    <div class="card stack mk" id="mk-haram">
+      <h3>فضل الصلاة في المسجد الحرام</h3>
+      <div class="quote"><p class="sacred">قال ﷺ: «صَلَاةٌ فِي مَسْجِدِي هَذَا أَفْضَلُ مِنْ أَلْفِ صَلَاةٍ فِيمَا سِوَاهُ إِلَّا الْمَسْجِدَ الْحَرَامَ، وَصَلَاةٌ فِي الْمَسْجِدِ الْحَرَامِ أَفْضَلُ مِنْ مِائَةِ أَلْفِ صَلَاةٍ فِيمَا سِوَاهُ»</p><small>رواه أحمد وابن ماجه</small></div>
+      <p>فاحرص على أداء الصلوات في جماعة في الحرم، وعلى التبكير إليها، والإكثار من النوافل وقراءة القرآن والذكر.</p>
+    </div>
+    <div class="card stack mk" id="mk-zamzam">
+      <h3>ماء زمزم</h3>
+      <div class="quote"><p class="sacred">قال ﷺ: «مَاءُ زَمْزَمَ لِمَا شُرِبَ لَهُ»</p><small>رواه ابن ماجه</small></div>
+      <div class="quote"><p class="sacred">وقال ﷺ: «إِنَّهَا مُبَارَكَةٌ، إِنَّهَا طَعَامُ طُعْمٍ»</p><small>رواه مسلم</small></div>
+      <p>فأكثر من الشرب منه، واشرب وأنت تنوي ما ترجو من خير الدنيا والآخرة، وادعُ بما شئت.</p>
+    </div>
+    <div class="card stack mk" id="mk-madina">
+      <h3>زيارة المدينة المنورة</h3>
+      <div class="quote"><p class="sacred">قال ﷺ: «صَلَاةٌ فِي مَسْجِدِي هَذَا خَيْرٌ مِنْ أَلْفِ صَلَاةٍ فِيمَا سِوَاهُ إِلَّا الْمَسْجِدَ الْحَرَامَ»</p><small>متفق عليه</small></div>
+      <ul class="mklist">
+        <li>يُستحب الصلاة في المسجد النبوي، والإكثار من الصلاة في الروضة الشريفة (بحجز موعد عبر تطبيق نُسُك).</li>
+        <li>السلام على النبي ﷺ وعلى صاحبيه أبي بكر وعمر رضي الله عنهما.</li>
+        <li>زيارة مسجد قباء والصلاة فيه.</li>
+      </ul>
+      <div class="quote"><p class="sacred">قال ﷺ: «مَنْ تَطَهَّرَ فِي بَيْتِهِ ثُمَّ أَتَى مَسْجِدَ قُبَاءَ فَصَلَّى فِيهِ صَلَاةً، كَانَ لَهُ كَأَجْرِ عُمْرَةٍ»</p><small>رواه ابن ماجه</small></div>
+    </div>
+  </div>
+</section>
 <section class="view narrow" id="v-hajj" hidden>
   <div class="trip-hero">
     <img data-img="hero_hajj" alt="جبل الرحمة بعرفات">
@@ -845,6 +892,7 @@ footer p{font-size:.85rem;color:var(--muted)}
     </button>
     <div class="ctr-ctl"><button class="btn ghost sm" id="ctrUndo">تراجع شوط</button><button class="btn ghost sm" id="ctrReset">ابدأ من جديد</button></div>
     <div class="card ctr-hint" id="ctrHint"></div>
+    <button type="button" class="inlink" data-go="makkah" data-anchor="mk-tawaf" style="align-self:center">بتطوف تطوعًا؟ اعرف فضل طواف التطوع ←</button>
   </div>
 </section>
 
@@ -1182,7 +1230,7 @@ const steps=[
  <p>وعند الخروج من المسجد الحرام، نخرج بالقدم اليسرى ونقول:</p>
  <div class="quote"><p class="sacred">بِسْمِ اللَّهِ وَالسَّلَامُ عَلَى رَسُولِ اللَّهِ، اللَّهُمَّ اعْصِمْنِي مِنَ الشَّيْطَانِ</p></div>
  <p class="closing">وبهذا تنتهي مناسك العمرة، تقبّل الله طاعتكم وصالح الأعمال</p>
- <button type="button" class="inlink" data-jump="umrah-again">تريد أداء عمرة أخرى أو عمرة عن غيرك؟ ←</button>`}
+ <button type="button" class="inlink" data-go="makkah">خلّصت عمرتك؟ اعرف كيف تغتنم باقي أيامك في مكة ←</button>`}
 ];
 const lapState={tawaf:0,sai:0};
 const lapMsg={
@@ -1917,7 +1965,7 @@ $('#dkReset').onclick=e=>{const b=e.currentTarget;if(!dkArm){dkArm=true;b.textCo
  svg.innerHTML=`<g class="r1">${g1}</g><g class="r2">${g2}</g><g class="r3">${g3}</g>${core}${tw}`;})();
 
 /* ---------- navigation ---------- */
-const TRIP=[['umrah','مناسك العمرة'],['hajj','مناسك الحج'],['counter','العدّاد'],['duaa','الأدعية'],['adhkar','الأذكار'],['talbiya','التلبية'],['fadail','الفضائل'],['guide','إرشادات'],['tracker','عباداتي']];
+const TRIP=[['umrah','مناسك العمرة'],['makkah','في مكة'],['hajj','مناسك الحج'],['counter','العدّاد'],['duaa','الأدعية'],['adhkar','الأذكار'],['talbiya','التلبية'],['fadail','الفضائل'],['guide','إرشادات'],['tracker','عباداتي']];
 $('#chips').innerHTML=TRIP.map(([v,l])=>`<button data-go="${v}">${PRIV.includes(v)?lockSvg:''}${l}</button>`).join('');
 {const ch=$('#chips'),bar=$('#tripBar');const upd=()=>{const max=ch.scrollWidth-ch.clientWidth,pos=Math.abs(ch.scrollLeft),endL=pos>=max-4,startR=pos<=4;
  bar.querySelector('.carr.l').classList.toggle('off',endL||max<=4);bar.querySelector('.cfade.l').classList.toggle('off',endL||max<=4);
