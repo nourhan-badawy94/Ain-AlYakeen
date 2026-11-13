@@ -1477,10 +1477,10 @@ const DUA={
   ['مَاءُ زَمْزَمَ لِمَا شُرِبَ لَهُ','رواه ابن ماجه','عند شرب زمزم: يشرب وينوي ما يرجو من خير الدنيا والآخرة'],
   ['اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، ﴿سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ ۝ وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ﴾ (اللَّهُمَّ إِنَّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا الْبِرَّ وَالتَّقْوَى، وَمِنَ الْعَمَلِ مَا تَرْضَى، اللَّهُمَّ هَوِّنْ عَلَيْنَا سَفَرَنَا هَذَا وَاطْوِ عَنَّا بُعْدَهُ، اللَّهُمَّ أَنْتَ الصَّاحِبُ فِي السَّفَرِ، وَالْخَلِيفَةُ فِي الْأَهْلِ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ وَعْثَاءِ السَّفَرِ، وَكَآبَةِ الْمَنْظَرِ، وَسُوءِ الْمُنْقَلَبِ فِي الْمَالِ وَالْأَهْلِ) (آيِبُونَ، تَائِبُونَ، عَابِدُونَ، لِرَبِّنَا حَامِدُونَ)', 'رواه مسلم', 'عند الرجوع من السفر']
  ]};
-let duaCat='quran';
+let duaCat='quran';try{const c=localStorage.getItem('ainyaqeen-duacat');if(c&&DUA[c])duaCat=c;}catch(e){}
 function renderDua(){document.querySelectorAll('#duaSeg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.c===duaCat));
  $('#duaList').innerHTML=DUA[duaCat].map(([t,s,h],i)=>`<article class="dua">${h?`<span class="ttl">${h}</span>`:''}<p class="sacred">${duaCat==='quran'?'﴿'+t+'﴾':t}</p><div class="row"><span class="src">${s}</span><button class="copy" data-i="${i}">نسخ</button></div></article>`).join('');}
-$('#duaSeg').onclick=e=>{const b=e.target.closest('button');if(b){duaCat=b.dataset.c;renderDua();}};
+$('#duaSeg').onclick=e=>{const b=e.target.closest('button');if(b){duaCat=b.dataset.c;try{localStorage.setItem('ainyaqeen-duacat',duaCat)}catch(_){}renderDua();}};
 $('#duaList').onclick=e=>{const b=e.target.closest('.copy');if(!b)return;const d=DUA[duaCat][+b.dataset.i];copyText(d[0]+' ('+d[1]+')',b);};
 renderDua();
 
@@ -1963,7 +1963,10 @@ $('#chips').innerHTML=TRIP.map(([v,l])=>`<button data-go="${v}">${PRIV.includes(
  bar.querySelector('.carr.r').onclick=()=>ch.scrollBy({left:ch.clientWidth*.7,behavior:'smooth'});
  window.__chipsUpd=upd;setTimeout(upd,50);}
 const VIEWS=['home','programs','contact',...TRIP.map(t=>t[0]),'journey','progress'];
-function show(v,anchor,nav){if(!VIEWS.includes(v))v='home';
+const KEEP_SCROLL=['duaa','adhkar','talbiya','fadail','makkah','umrah','hajj','guide'];let scrollMem={};try{scrollMem=JSON.parse(localStorage.getItem('ainyaqeen-scroll')||'{}')||{}}catch(e){}
+const saveScroll=()=>{if(KEEP_SCROLL.includes(curView)){scrollMem[curView]=Math.round(window.scrollY);try{localStorage.setItem('ainyaqeen-scroll',JSON.stringify(scrollMem))}catch(e){}}};
+{let st=null;window.addEventListener('scroll',()=>{clearTimeout(st);st=setTimeout(saveScroll,250);},{passive:true});}
+function show(v,anchor,nav){if(!VIEWS.includes(v))v='home';if(typeof curView!=='undefined'&&curView&&curView!==v)saveScroll();
  try{if(nav!=='pop'){const st={v,anchor:anchor||null};if(nav==='init')history.replaceState(st,'','#'+v);else if(v!==curView||anchor)history.pushState(st,'','#'+v);}}catch(e){}
  curView=v;
  VIEWS.forEach(x=>{const el=$('#v-'+x);el.hidden=x!==v;el.classList.remove('anim');});
@@ -1974,7 +1977,7 @@ function show(v,anchor,nav){if(!VIEWS.includes(v))v='home';
  if(window.__ctr){window.__ctr.wl(v==='counter');if(v==='counter')window.__ctr.draw();}
  if(v==='adhkar')renderAdhkar();if(PRIV.includes(v))refreshPriv(true);
  setImgs(cur);document.querySelectorAll('video.hero-vid').forEach(vd=>{try{if(cur.contains(vd)&&!matchMedia('(prefers-reduced-motion:reduce)').matches)vd.play().catch(()=>{});else vd.pause();}catch(e){}});$('#drawer').hidden=true;$('#menuBtn').setAttribute('aria-expanded','false');
- if(anchor){const el=document.getElementById(anchor);if(el)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),50);}else window.scrollTo(0,0);}
+ if(anchor){const el=document.getElementById(anchor);if(el)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),50);}else if(KEEP_SCROLL.includes(v)&&scrollMem[v]){window.scrollTo(0,0);setTimeout(()=>window.scrollTo(0,scrollMem[v]),60);}else window.scrollTo(0,0);}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-jump]');if(!b)return;const el=document.getElementById(b.dataset.jump);if(!el)return;el.open=true;el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'});});
 document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)return;e.preventDefault();show(b.dataset.go,b.dataset.anchor);});
 document.querySelectorAll('.dgroup').forEach(g=>g.onclick=()=>{const o=g.getAttribute('aria-expanded')!=='true';g.setAttribute('aria-expanded',o);g.parentElement.nextElementSibling.hidden=!o;});
